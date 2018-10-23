@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta content="" name="description" />
+    <meta content="" name="author" />
+    <link href="../media/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <link href="../media/css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css"/>
+    <link href="../media/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+    <link href="../media/css/style-metro.css" rel="stylesheet" type="text/css"/>
+    <link href="../media/css/style.css" rel="stylesheet" type="text/css"/>
+    <link href="../media/css/style-responsive.css" rel="stylesheet" type="text/css"/>
+    <link href="../media/css/default.css" rel="stylesheet" type="text/css" id="style_color"/>
+    <link href="../media/css/uniform.default.css" rel="stylesheet" type="text/css"/>
+    <link href="../media/css/jquery.gritter.css" rel="stylesheet" type="text/css"/>
+    <link rel="shortcut icon" href="../media/image/favicon.ico" />
+
+    <script src="../js/jquery.min.js" type="text/javascript"></script>
+    <script	src="../layer/layer.js" type="text/javascript">	</script>
+    <title>旅游游记分析系统</title>
+</head>
+
+<script>
+    /*
+    $(function () {
+        $.ajax({
+            "url": "/getUsername",
+            "async": false,
+            "type": "get",
+            "dataType": "json",
+            "success": function (data) {
+                if (null != data && "" != data) {
+                    document.getElementById("user").innerHTML = data.username;
+                } else {
+                    layer.alert('请先登录', {
+                        skin: 'layui-layer-molv' //样式类名
+                        , closeBtn: 0
+                    });
+                    setTimeout(function () {
+                        window.location.href = encodeURI("/login");
+                    },3000);
+                }
+            }
+        });
+
+    })
+    */
+</script>
+
+<body class="page-header-fixed">
+<!--头部-->
+<div class="header navbar navbar-inverse navbar-fixed-top" th:include="head.html"></div>
+<div class="page-container  row-fluid">
+    <!-- 左边菜单栏 下-->
+    <div class="page-sidebar nav-collapse collapse">
+        <!--左侧栏-->
+        <ul class="page-sidebar-menu">
+            <li>
+                <div class="sidebar-toggler hidden-phone"></div>
+            </li>
+            <li>
+
+            </li>
+            <!--<li class="start active ">-->
+            <li class="start ">
+                <a href="/index">
+                    <i class="icon-home"></i>
+                    <span class="title">首页</span>
+                </a>
+            </li>
+            <li class="active">
+                <a href="javascript:;">
+                    <i class="icon-cogs"></i>
+                    <span class="title">我的旅游</span>
+                    <span class="arrow "></span>
+                </a>
+                <ul class="sub-menu">
+                    <li class="active">
+                        <a href="/list" >旅游手册</a>
+                    </li>
+                    <li >
+                        <a href="/map4">拓扑图</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="javascript:;">
+                    <i class="icon-bookmark-empty"></i>
+                    <span class="title">用户管理</span>
+                    <span class="arrow open"></span>
+                </a>
+                <ul class="sub-menu">
+                    <li>
+                        <a href="general.html">个人信息</a>
+                    </li>
+                    <li >
+                        <a href="ui_buttons.html">
+                            Buttons</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="">
+                <a href="javascript:;">
+                    <i class="icon-table"></i>
+                    <span class="title">Form Stuff</span>
+                    <span class="arrow "></span>
+                </a>
+                <ul class="sub-menu">
+                    <li >
+                        <a href="form_layout.html">
+                            Form Layouts</a>
+                    </li>
+                    <li >
+                        <a href="form_samples.html">
+
+                            Advance Form Samples</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="">
+                <a href="javascript:;">
+                    <i class="icon-briefcase"></i>
+                    <span class="title">路线推荐</span>
+                    <span class="arrow "></span>
+                </a>
+                <ul class="sub-menu">
+                    <li >
+                        <a href="page_timeline.html">
+                            <i class="icon-time"></i>
+                            Timeline</a>
+                    </li>
+                    <li >
+                        <a href="page_coming_soon.html">
+                            <i class="icon-cogs"></i>
+                            Coming Soon</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="">
+                <a href="javascript:;">
+                    <i class="icon-gift"></i>
+                    <span class="title">Extra</span>
+                    <span class="arrow "></span>
+                </a>
+                <ul class="sub-menu">
+                    <li >
+                        <a href="extra_profile.html">
+                            User Profile</a>
+                    </li>
+                    <li >
+                        <a href="extra_lock.html">
+                            Lock Screen</a>
+                    </li>
+                    <li >
+                        <a href="extra_faq.html">
+                            FAQ</a>
+                    </li>
+                    <li >
+                        <a href="inbox.html">
+                            Inbox</a>
+                    </li>
+                    <li >
+                        <a href="extra_search.html">
+
+                            Search Results</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="javascript:;">
+                    <i class="icon-folder-open"></i>
+                    <span class="title">4 Level Menu</span>
+                    <span class="arrow "></span>
+                </a>
+                <ul class="sub-menu">
+                    <li>
+                        <a href="javascript:;">
+                            <i class="icon-cogs"></i>
+                            Item 1
+                            <span class="arrow"></span>
+                        </a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a href="javascript:;">
+                                    <i class="icon-user"></i>
+                                    Sample Link 1
+                                    <span class="arrow"></span>
+                                </a>
+                                <ul class="sub-menu">
+                                    <li><a href="#"><i class="icon-remove"></i> Sample Link 1</a></li>
+                                    <li><a href="#"><i class="icon-pencil"></i> Sample Link 1</a></li>
+                                    <li><a href="#"><i class="icon-edit"></i> Sample Link 1</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#"><i class="icon-user"></i>  Sample Link 1</a></li>
+                            <li><a href="#"><i class="icon-external-link"></i>  Sample Link 2</a></li>
+                            <li><a href="#"><i class="icon-bell"></i>  Sample Link 3</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:;">
+                            <i class="icon-globe"></i>
+                            Item 2
+                            <span class="arrow"></span>
+                        </a>
+                        <ul class="sub-menu">
+                            <li><a href="#"><i class="icon-user"></i>  Sample Link 1</a></li>
+                            <li><a href="#"><i class="icon-external-link"></i>  Sample Link 1</a></li>
+                            <li><a href="#"><i class="icon-bell"></i>  Sample Link 1</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="icon-folder-open"></i>
+                            Item 3
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="last ">
+                <a href="charts.html">
+                    <i class="icon-bar-chart"></i>
+                    <span class="title">Visual Charts</span>
+                </a>
+            </li>
+        </ul>
+        <!-- END SIDEBAR MENU -->
+    </div>
+    <!-- 左边菜单栏 上-->
+
+    <!--主体区 -->
+        <div class="page-content">
+            <!--主页-->
+            <div class="container-fluid">
+                <!--页头-->
+                <div class="row-fluid">
+                    <div class="span12">
+                        <h3 class="page-title">
+                            General <small>general ui components</small>
+                        </h3>
+                        <ul class="breadcrumb">
+                            <li>
+                                <i class="icon-home"></i>
+                                <a href="index.html">Home</a>
+                                <i class="icon-angle-right"></i>
+                            </li>
+                            <li>
+                                <a href="#">UI Features</a>
+                                <i class="icon-angle-right"></i>
+                            </li>
+                            <li><a href="#">General</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- 页头结束-->
+
+                <div>
+                    <div class="row-fluid">
+                        <div class="col-md-1 "></div>
+                        <div class="col-md-10 ">
+                            <table  class="table table-striped">
+                                <tr>
+                                    <td>游记编号</td>
+                                    <td>游记名称</td>
+                                </tr>
+
+                                <forEach th:each="item:${travelbeans }" varStatus="status">
+                                    <tr>
+                                        <td th:text="${item.id }"></td>
+                                        <!-- /detail?title="+${item.title } -->
+                                        <td><a th:href="@{'/detail?id='+${item.id }}" th:text="${item.title }"></a></td>
+                                    </tr>
+                                </forEach>
+                            </table>
+                        </div>
+                        <div class=" col-md-1"></div>
+                    </div>
+                </div>
+
+                </div>
+        </div>
+
+        <div class="footer">
+            <div class="footer-tools">
+            <span class="go-top">
+            <i class="icon-angle-up"><font size="3">回到顶部</font></i>
+            </span>
+            </div>
+        </div>
+</div>
+        <!-- 底部 -->
+
+        <!-- JS -->
+<script src="../media/js/jquery-1.10.1.min.js" type="text/javascript"></script>
+<script src="../media/js/jquery-migrate-1.2.1.min.js" type="text/javascript"></script>
+<!-- IMPORTANT! Load jquery-ui-1.10.1.custom.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip -->
+<script src="../media/js/jquery-ui-1.10.1.custom.min.js" type="text/javascript"></script>
+<script src="../media/js/bootstrap.min.js" type="text/javascript"></script>
+<!--[if lt IE 9]>
+<script src="../media/js/excanvas.min.js"></script>
+<script src="../media/js/respond.min.js"></script>
+<![endif]-->
+<script src="../media/js/jquery.slimscroll.min.js" type="text/javascript"></script>
+<script src="../media/js/jquery.blockui.min.js" type="text/javascript"></script>
+<script src="../media/js/jquery.cookie.min.js" type="text/javascript"></script>
+<script src="../media/js/jquery.uniform.min.js" type="text/javascript" ></script>
+<!-- END CORE PLUGINS -->
+<!-- BEGIN PAGE LEVEL PLUGINS -->
+<script type="text/javascript" src="../media/js/jquery.gritter.js"></script>
+<script type="text/javascript" src="../media/js/jquery.pulsate.min.js"></script>
+<script type="text/javascript" src="../media/js/jquery.bootpag.min.js"></script>
+<!-- END PAGE LEVEL PLUGINS -->
+<!-- BEGIN PAGE LEVEL SCRIPTS -->
+<script src="../media/js/app.js"></script>
+<script src="../media/js/ui-general.js"></script>
+<!-- END PAGE LEVEL SCRIPTS -->
+<script>
+    jQuery(document).ready(function() {
+        // initiate layout and plugins
+        App.init();
+        UIGeneral.init();
+    });
+</script>
+
+
+</body>
+</html>
