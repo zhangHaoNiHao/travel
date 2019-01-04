@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta content="" name="description" />
+    <meta content="" name="author" />
+    <link href="../media/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <link href="../media/css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css"/>
+    <link href="../media/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+    <link href="../media/css/style-metro.css" rel="stylesheet" type="text/css"/>
+    <link href="../media/css/style.css" rel="stylesheet" type="text/css"/>
+    <link href="../media/css/style-responsive.css" rel="stylesheet" type="text/css"/>
+    <link href="../media/css/default.css" rel="stylesheet" type="text/css" id="style_color"/>
+    <link href="../media/css/uniform.default.css" rel="stylesheet" type="text/css"/>
+    <link href="../media/css/jquery.gritter.css" rel="stylesheet" type="text/css"/>
+
+   <link href="../media/css/daterangepicker.css" rel="stylesheet" type="text/css" />
+    <link href="../media/css/fullcalendar.css" rel="stylesheet" type="text/css"/>
+    <link href="../media/css/jqvmap.css" rel="stylesheet" type="text/css" media="screen"/>
+
+    <link href="../media/css/jquery.easy-pie-chart.css" rel="stylesheet" type="text/css" media="screen"/>
+
+    <script src="../js/jquery.min.js" type="text/javascript"></script>
+    <script	src="../layer/layer.js" type="text/javascript">	</script>
+
+    <link rel="shortcut icon" href="../media/image/favicon.ico" />
+
+    <!--百度地图                         ak=dWE9mgZOhKTz7Bgkeg9VAGamm9GfKMW8-->
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=dlVDKuLvUzE0MWjYW7WARVYxLaIhZx12"></script>
+    <script type="text/javascript" src="../media/mapv.js"></script>
+
+    <!--mafengwo-->
+    <link href="https://css.mafengwo.net/css/cv/css+base:css+jquery.suggest:css+plugins:css+plugins+jquery.jgrowl:css+other+popup:css+mfw-header.2015^YlVS^1527308432.css" rel="stylesheet" type="text/css"/>
+    <link href="https://css.mafengwo.net/css/cv/css+mfw-index.2015:css+jquery-ui-1.9.1.custom.min:css+hotel+datepicker-range^ZFM^1525846268.css" rel="stylesheet" type="text/css"/>
+    <script language="javascript" src="https://js.mafengwo.net/js/cv/js+jquery-1.8.1.min:js+global+json2:js+M+Module:js+M+M:js+M+Log:js+m.statistics:js+advert+inspector^alw^1536006240.js" type="text/javascript" crossorigin="anonymous"></script>
+
+
+
+    <title>旅游游记分析系统</title>
+</head>
+
+<script>
+    /*
+    $(function () {
+        $.ajax({
+            "url": "/getUsername",
+            "async": false,
+            "type": "get",
+            "dataType": "json",
+            "success": function (data) {
+                if (null != data && "" != data) {
+                    document.getElementById("user").innerHTML = data.username;
+                } else {
+                    layer.alert('请先登录', {
+                        skin: 'layui-layer-molv' //样式类名
+                        , closeBtn: 0
+                    });
+                    setTimeout(function () {
+                        window.location.href = encodeURI("/login");
+                    },2000);
+                }
+            }
+        });
+    })
+    */
+</script>
+
+<body class="page-header-fixed">
+<!--头部-->
+<div class="header navbar navbar-inverse navbar-fixed-top" th:include="head.html">
+</div>
+
+<div class="page-container">
+
+    <!-- 左边菜单栏 下-->
+    <div class="page-sidebar nav-collapse collapse" th:include="left.html">
+    </div>
+    <!-- 左边菜单栏 上-->
+
+    <!--主体区 -->
+    <div class="page-content">
+
+        <!--主页-->
+        <div class="container-fluid">
+            <!--页头-->
+            <div class="row-fluid">
+                <div class="span12">
+                    <h3 class="page-title">
+                        <!--页头  仪表盘-->
+                        首页 <small>statistics and more</small>
+                    </h3>
+                    <ul class="breadcrumb">
+                        <!--当前页面的地址-->
+                        <li>
+                            <i class="icon-home"></i>
+                            <a href="index.html">首页</a>
+                            <i class="icon-angle-right"></i>
+                        </li>
+                        <li><a href="#">Dashboard</a></li>
+                    </ul>
+                </div>
+            </div>
+            <!-- 页头结束-->
+
+            <div id="dashboard">
+                <!-- 整个页面 -->
+                <!-- 第一个大分区，里边四个小分区 -->
+                <div class="row-fluid">
+                    <div class="span12">
+                        <div class="mfw-focus" id="_j_mfw_focus">
+                            <div class="show-slider" id="_j_top_pic_container" style="height: 405px;">
+                                <ul class="show-image">
+                                    <li class="first" style="display: list-item;">
+                                        <a href="/i/10921014.html" target="_blank" class="show-pic">
+                                            <img src="https://b1-q.mafengwo.net/s12/M00/54/07/wKgED1vS-JuAUo0iAAVVhK9soKM43.jpeg?imageMogr2%2Finterlace%2F1" ></a>
+                                        <a href="/i/10921014.html" target="_blank" class="show-title dark">
+                                            <div class="date">
+                                                <span class="day">27</span>/Oct.2018
+                                            </div>
+                                            <h3>冰岛环游记 ▏“白日梦想家”的奇幻自驾</h3>
+                                        </a>
+                                    </li>
+
+                                </ul>
+                                <ul class="show-nav">
+                                    <li class="">
+                                        <a href="javascript:">
+                                            <img src="https://b4-q.mafengwo.net/s12/M00/53/CF/wKgED1vS-GeAMLEjAAKTV6FRqFs32.jpeg?imageMogr2%2Fthumbnail%2F%21108x67r%2Fgravity%2FCenter%2Fcrop%2F%21108x67%2Fquality%2F90" height="62" width="110">
+                                            <span></span>
+                                        </a>
+                                    </li>
+                                    <li class="">
+                                        <a href="javascript:">
+                                            <img src="https://b1-q.mafengwo.net/s12/M00/4A/3B/wKgED1vRyyCAayzCAAJoxNSlVaY15.jpeg?imageMogr2%2Fthumbnail%2F%21108x67r%2Fgravity%2FCenter%2Fcrop%2F%21108x67%2Fquality%2F90" height="62" width="110">
+                                            <span></span>
+                                        </a>
+                                    </li>
+                                    <li class="">
+                                        <a href="javascript:">
+                                            <img src="https://b3-q.mafengwo.net/s12/M00/2B/0E/wKgED1vQlRmAKr63AAOcIIui3NU68.jpeg?imageMogr2%2Fthumbnail%2F%21108x67r%2Fgravity%2FCenter%2Fcrop%2F%21108x67%2Fquality%2F90" height="62" width="110">
+                                            <span></span>
+                                        </a>
+                                    </li>
+                                    <li class="">
+                                        <a href="javascript:">
+                                            <img src="https://n3-q.mafengwo.net/s12/M00/86/8E/wKgED1vOfheAZZwpAAIxgiWwXOY70.jpeg?imageMogr2%2Fthumbnail%2F%21108x67r%2Fgravity%2FCenter%2Fcrop%2F%21108x67%2Fquality%2F90" height="62" width="110"><span></span></a></li>
+                                    <li class="active">
+                                        <a href="javascript:">
+                                            <img src="https://n4-q.mafengwo.net/s12/M00/43/7D/wKgED1vN54GAZPPKAASSlS0jRFA99.jpeg?imageMogr2%2Fthumbnail%2F%21108x67r%2Fgravity%2FCenter%2Fcrop%2F%21108x67%2Fquality%2F90" height="62" width="110"><span></span></a></li>
+                                </ul>
+                            </div>
+                            <div class="search-container" id="_j_index_search">
+                                <div class="search-group">
+
+                                    <div class="searchtab" id="_j_index_search_tab">
+                                        <ul class="clearfix">
+                                            <li data-index="2"><i></i>目的地</li>
+                                        </ul>
+                                    </div>
+
+                                    <!-- 目的地 begin -->
+                                    <div class="searchbar" id="_j_index_search_bar_mdd">
+                                        <form action="/search/s.php" method="get">
+                                            <div class="search-wrapper">
+                                                <div class="search-input">
+                                                    <input name="q" type="text" placeholder="我要去..." id="_j_index_search_input_mdd" autocomplete="off">
+                                                </div>
+                                            </div>
+                                            <div class="search-button" id="_j_index_search_btn_mdd">
+                                                <a role="button" href="/list">
+                                                    <!--class="icon-search"-->
+                                                    <i><img src="../img/3.ico"></i>
+                                                </a>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <!-- 目的地 end -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--二 -->
+                    <!--<div class="span12">-->
+                    <div class="row-fluid">
+                        <div class="span6">
+                            <!-- BEGIN PORTLET-->
+                            <div class="portlet solid bordered light-grey">
+                                <div class="portlet-title">
+                                    <div class="caption"><i class="icon-bar-chart"></i>全国热门景点</div>
+                                    <div class="tools">
+                                        <div class="btn-group pull-right" data-toggle="buttons-radio">
+                                            <a href="" class="btn mini">Users</a>
+                                            <a href="" class="btn mini active">Feedbacks</a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="portlet-body">
+                                    <!--加载地图-->
+                                    <div id="map" style="width: 100%;height: 500px"></div>
+                                    <canvas id="canvas"></canvas>
+                                </div>
+                            </div>
+                            <!-- END PORTLET-->
+                        </div>
+                        <!--<div class="span6">
+                            &lt;!&ndash;地图&ndash;&gt;
+                            <div id="map" style="width: 100%;height: 400px"></div>
+                            <canvas id="canvas"></canvas>
+
+                        </div>-->
+
+                        <div class="span6">
+                            <!-- BEGIN PORTLET-->
+                            <div class="portlet paddingless">
+                                <div class="portlet-title line">
+                                    <div class="caption"><i class="icon-bell"></i>游记</div>
+                                    <div class="tools">
+                                        <a href="" class="collapse"></a>
+                                        <a href="#portlet-config" data-toggle="modal" class="config"></a>
+                                        <a href="" class="reload"></a>
+                                        <select>
+                                            <option>1-2月</option>
+                                            <option>3-4月</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="portlet-body">
+                                    <!--BEGIN TABS-->
+                                    <div class="tabbable tabbable-custom">
+                                        <ul class="nav nav-tabs">
+                                            <li class="active"><a href="#tab_1_1" data-toggle="tab">热门游记</a></li>
+                                            <li><a href="#tab_1_2" data-toggle="tab">最新游记</a></li>
+                                            <!--<li><a href="#tab_1_3" data-toggle="tab">Recent Users</a></li>-->
+                                        </ul>
+                                        <div class="tab-content">
+                                            <div class="tab-pane active" id="tab_1_1">
+                                                <div class="scroller" data-height="290px" data-always-visible="1" data-rail-visible="0">
+                                                    <ul class="feeds">
+                                                        <li>
+                                                            <div class="col1">
+                                                                <div class="cont">
+                                                                    <div class="cont-col1">
+                                                                        <div class="label label-success">
+                                                                            <i class="icon-bell"></i>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="cont-col2">
+                                                                        <div class="desc">
+                                                                            大黑山行摄攻略（连载一）
+                                                                            <!--<span class="label label-important label-mini">
+																			Take action
+																			<i class="icon-share-alt"></i>
+																			</span>-->
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col2">
+                                                                <div class="date">
+                                                                    Just now
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="col1">
+
+                                                                <div class="cont">
+
+                                                                    <div class="cont-col1">
+                                                                        <div class="label label-info">
+                                                                            <i class="icon-bullhorn"></i>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="cont-col2">
+                                                                        <div class="desc">
+                                                                            登两千米白云山，赏千年银杏林，仿佛跌入一个童话世界【附旅行视频】
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col2">
+                                                                <div class="date">
+                                                                    22 hours
+                                                                </div>
+                                                            </div>
+                                                        </li>
+
+                                                        <li>
+                                                            <div class="col1">
+                                                                <div class="cont">
+                                                                    <div class="cont-col1">
+                                                                        <div class="label label-info">
+                                                                            <i class="icon-bullhorn"></i>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="cont-col2">
+                                                                        <div class="desc">
+                                                                            大家好，我给大家介绍一下，这里的房子长在树上，还能泡温泉。#御游天地#
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col2">
+                                                                <div class="date">
+                                                                    22 hours
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="col1">
+                                                                <div class="cont">
+                                                                    <div class="cont-col1">
+                                                                        <div class="label">
+                                                                            <i class="icon-bullhorn"></i>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="cont-col2">
+                                                                        <div class="desc">
+                                                                            【三亚】打个飞的到三亚过夏天，36小时看醉美日落，一天穿越千年
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col2">
+                                                                <div class="date">
+                                                                    21 hours
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="col1">
+                                                                <div class="cont">
+                                                                    <div class="cont-col1">
+                                                                        <div class="label label-info">
+                                                                            <i class="icon-bullhorn"></i>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="cont-col2">
+                                                                        <div class="desc">
+                                                                            那些我很冒险的梦，就让我们去兴安岭里疯---2017国庆内蒙自由行
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col2">
+                                                                <div class="date">
+                                                                    22 hours
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+
+                                            <div class="tab-pane" id="tab_1_2">
+                                                <div class="scroller" data-height="290px" data-always-visible="1" data-rail-visible1="1">
+                                                    <ul class="feeds">
+                                                        <li>
+                                                            <a href="#">
+                                                                <div class="col1">
+                                                                    <div class="cont">
+                                                                        <div class="cont-col1">
+                                                                            <div class="label label-success">
+                                                                                <i class="icon-bell"></i>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="cont-col2">
+                                                                            <div class="desc">
+                                                                                大黑山行摄攻略（连载一）
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col2">
+                                                                    <div class="date">
+                                                                        Jst now
+
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="#">
+                                                                <div class="col1">
+                                                                    <div class="cont">
+                                                                        <div class="cont-col1">
+                                                                            <div class="label label-success">
+                                                                                <i class="icon-bell"></i>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="cont-col2">
+                                                                            <div class="desc">
+                                                                                偷得浮生半日闲——杭州趴趴走
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col2">
+                                                                    <div class="date">
+                                                                        Just now
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="#">
+                                                                <div class="col1">
+                                                                    <div class="cont">
+                                                                        <div class="cont-col1">
+                                                                            <div class="label label-success">
+                                                                                <i class="icon-bell"></i>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="cont-col2">
+                                                                            <div class="desc">
+                                                                                骑行在人间天堂——杭州的“食住行”
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col2">
+                                                                    <div class="date">
+                                                                        Just now
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="#">
+                                                                <div class="col1">
+                                                                    <div class="cont">
+                                                                        <div class="cont-col1">
+
+                                                                            <div class="label label-success">
+                                                                                <i class="icon-bell"></i>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="cont-col2">
+                                                                            <div class="desc">
+                                                                                2014年4月12日-13日，杭州（太子湾公园，九溪十八涧，浴鹄湾，湘湖）
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col2">
+                                                                    <div class="date">
+                                                                        Just now
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 页 -->
+    </div>
+
+        <div class="footer">
+            <div class="footer-tools">
+			<span class="go-top">
+			<i class="icon-angle-up"><font size="3">回到顶部</font></i>
+			</span>
+            </div>
+        </div>
+</div>
+
+
+        <!-- 底部 -->
+
+        <!-- JS -->
+        <script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
+        <script src="../media/js/jquery-migrate-1.2.1.min.js" type="text/javascript"></script>
+        <script src="../media/js/jquery-ui-1.10.1.custom.min.js" type="text/javascript"></script>
+        <script src="../media/js/bootstrap.min.js" type="text/javascript"></script>
+        <script src="../media/js/jquery.slimscroll.min.js" type="text/javascript"></script>
+        <script src="../media/js/jquery.blockui.min.js" type="text/javascript"></script>
+        <script src="../media/js/jquery.cookie.min.js" type="text/javascript"></script>
+        <script src="../media/js/jquery.uniform.min.js" type="text/javascript" ></script>
+        <script src="../media/js/jquery.vmap.js" type="text/javascript"></script>
+        <script src="../media/js/jquery.vmap.russia.js" type="text/javascript"></script>
+        <script src="../media/js/jquery.vmap.world.js" type="text/javascript"></script>
+        <script src="../media/js/jquery.vmap.europe.js" type="text/javascript"></script>
+        <script src="../media/js/jquery.vmap.germany.js" type="text/javascript"></script>
+        <script src="../media/js/jquery.vmap.usa.js" type="text/javascript"></script>
+        <script src="../media/js/jquery.vmap.sampledata.js" type="text/javascript"></script>
+        <script src="../media/js/jquery.flot.js" type="text/javascript"></script>
+        <script src="../media/js/jquery.flot.resize.js" type="text/javascript"></script>
+        <script src="../media/js/jquery.pulsate.min.js" type="text/javascript"></script>
+        <script src="../media/js/date.js" type="text/javascript"></script>
+        <script src="../media/js/daterangepicker.js" type="text/javascript"></script>
+        <script src="../media/js/jquery.gritter.js" type="text/javascript"></script>
+        <script src="../media/js/fullcalendar.min.js" type="text/javascript"></script>
+        <script src="../media/js/jquery.easy-pie-chart.js" type="text/javascript"></script>
+        <script src="../media/js/jquery.sparkline.min.js" type="text/javascript"></script>
+        <script src="../media/js/app.js" type="text/javascript"></script>
+        <script src="../media/js/index.js" type="text/javascript"></script>
+
+        <!-- END PAGE LEVEL SCRIPTS -->
+
+        <script>
+            jQuery(document).ready(function() {
+                App.init(); // initlayout and core plugins
+                Index.init();
+
+                Index.initChat();
+                Index.initMiniCharts();
+                Index.initDashboardDaterange();
+            });
+        </script>
+
+<script type="text/javascript">
+    // 百度地图API功能
+    var map = new BMap.Map("map", {
+        enableMapClick: true
+    });    // 创建Map实例
+    //map.centerAndZoom(new BMap.Point(105.403119, 38.028658), 6);  // 初始化地图,设置中心点坐标和地图级别
+    map.centerAndZoom("杭州", 9);
+    map.enableScrollWheelZoom(true); // 开启鼠标滚轮缩放
+
+    var arr = [];
+    var jingdian1 = "";
+    var name = "";
+    var lng = "";
+    var lat = "";
+    var num = "";
+
+    var opts = {
+        width : 250,     // 信息窗口宽度
+        height: 80,     // 信息窗口高度
+        title : "信息窗口" , // 信息窗口标题
+        enableMessage:true//设置允许信息窗发送短息
+    };
+
+    //ajax获取数据
+    $.ajax({
+        "url": "/jingdianNum",
+        "async": false,
+        "type": "get",
+        "dataType": "json",
+        "success": function (data) {
+            arr = data;
+            if (null != data && "" != data) {
+                for(var i=0; i<arr.length;i++){
+                    //将这些对象属性放到集合中
+                    //alert(arr[i].name+"   "+arr[i].num)
+                    lng = arr[i].lng;
+                    lat = arr[i].lat;
+                    name = arr[i].name;
+                    num = arr[i].num;
+                    jingdian1 = arr[i].jingdian
+
+                    var marker = new BMap.Marker(new BMap.Point(lng,lat));  // 创建标注
+                    var content = "景点："+jingdian1+" 热度："+num+" 满意度："+10;
+                    map.addOverlay(marker);               // 将标注添加到地图中
+                    addClickHandler(content,marker);
+                }
+            } else {
+
+            }
+        }
+    });
+
+    function addClickHandler(content,marker){
+        marker.addEventListener("click",function(e){
+            openInfo(content,e)}
+        );
+    }
+    function openInfo(content,e){
+        var p = e.target;
+        var point = new BMap.Point(p.getPosition().lng, p.getPosition().lat);
+        var infoWindow = new BMap.InfoWindow(content,opts);  // 创建信息窗口对象
+        map.openInfoWindow(infoWindow,point); //开启信息窗口
+    }
+
+</script>
+
+</body>
+</html>

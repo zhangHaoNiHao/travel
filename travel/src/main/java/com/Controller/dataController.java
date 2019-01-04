@@ -1,10 +1,16 @@
 package com.Controller;
 
+import com.Bean.JingdianNum;
 import com.Bean.TravelBean;
+import com.Bean.TravelBean1;
 import com.Bean.UserBean;
+import com.Dao.JingdianDao;
+import com.Dao.TravelDao;
 import com.Dao.UserDaoImp;
+import com.Service.JingdianService;
 import com.Service.UserService;
 
+import com.utils.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,7 +22,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,53 +33,31 @@ public class dataController {
 
     @Autowired //自动注入
     private UserService userService;
+    private JingdianService jigndianService;
 
-    @RequestMapping(value="/index")
-    public String index(HttpServletRequest req) throws Exception {
-        System.out.println("/index");
-        return "index";
-    }
-    @RequestMapping(value="/map")
-    public String map(HttpServletRequest req) throws Exception {
-        System.out.println("/map");
-        return "map";
-    }
 
-    @RequestMapping(value="/map2")
-    public String map2(HttpServletRequest req) throws Exception {
-        System.out.println("/map2");
-        return "map2";
-    }
 
-    @RequestMapping(value="/map3")
-    public String map3(HttpServletRequest req) throws Exception {
-        System.out.println("/map3");
-        return "map3";
-    }
-    @RequestMapping(value="/map4")
-    public String map4(HttpServletRequest req) throws Exception {
-        System.out.println("/map4");
-        return "map4";
-    }
 
     @RequestMapping(value="/general")
-    public String mgeneral(HttpServletRequest req) throws Exception {
+    public String mgeneral() throws Exception {
         System.out.println("/general");
-        return "general";
+        return "travel/general";
     }
 
 
     @RequestMapping(value="/baidu")
-    public String baidu(HttpServletRequest req) throws Exception {
+    public String baidu() throws Exception {
         System.out.println("/baidu");
-        return "baidu";
+        return "map/baidu";
     }
 
-    @RequestMapping(value="/login")
-    public String login() throws Exception {
-        System.out.println("/login");
-        return "login";
+    @RequestMapping(value="/indexMap")
+    public String indexMap() throws Exception {
+        System.out.println("/baidu");
+        return "Test/indexMap";
     }
+
+
 
     @RequestMapping(value="/login1")
     @ResponseBody//返回json格式数据
@@ -107,23 +90,24 @@ public class dataController {
         System.out.println("/list");
         List<TravelBean> list =  userService.TravelList();
         model.addAttribute("travelbeans",list);
-        return "list";
+        return "travel/list";
     }
 
+    String content = "";
     @RequestMapping(value="/detail")
-    //HttpServletRequest req
-    public String detail(Model model,Integer id) throws Exception {
+    public String detail(Model model,Integer id,String city) throws Exception {
         System.out.println("/detail?id="+ id);
-        //获取游记title
-        //根据游记title查询游记信息
-        TravelBean bean =  userService.searchTravel(id).get(0);
+        TravelDao dao = new TravelDao();
+        TravelBean1 travel =  dao.searchTravel(id);//userService.searchTravel(id).get(0);
+        content = travel.getContent();
         List<String> list = new ArrayList<>();
-        for (String l:bean.getTravel().split("\n")) {
+        for (String l:content.split("\n")) {
             list.add(l);
         }
-        System.err.println(list);
+        //System.err.println(list);
         model.addAttribute("travel",list);
-        return "detail1";
+        model.addAttribute("city",city);
+        return "travel/detail1";
     }
 
     /**
@@ -137,13 +121,6 @@ public class dataController {
         System.out.println("/travelList");
         List<TravelBean> travelList = userService.searchTravel(null);
         return travelList;
-        /*
-        for(TravelBean travelBean : travelList){
-            String content = travelBean.getTravel();
-            Integer id = travelBean.getId();
-            System.out.println("id: "+id+"  content: "+content);
-        }
-        */
     }
 
     /**
@@ -165,25 +142,6 @@ public class dataController {
         return list;
     }
 
-    @RequestMapping(value="/checkIsExit")
-    @ResponseBody//返回json格式数据
-    public int checkIsExit(String username,HttpServletRequest req) throws Exception {
-        System.out.println("checkIsExit用户:"+ username);
-        List<UserBean> list = userService.search(username);
-        System.out.println(list.toString());
-        int a = 0;
-        if(null != list && list.size() > 0){
-            //将数据存到session中
-            a = 1;
-            System.out.println("list不为空 ："+list.toString());
-            req.getSession().setAttribute("userbean",list.get(0));
-            System.out.println("checkIsExit用户"+list.toString());
-        }
-        else{
-            a = 0;
-        }
-        return a;
-    }
 
     @RequestMapping(value="/getUsername")
     @ResponseBody//返回json格式数据
@@ -219,5 +177,59 @@ public class dataController {
         connection.disconnect();// 断开连接
         return list;
     }
+
+    @RequestMapping(value="/jingdianNum")
+    @ResponseBody//返回json格式数据
+    public List<JingdianNum> jingdianNum() throws Exception {
+        JingdianDao dao = new JingdianDao();
+        System.out.println("查询所有的 景点数量");
+        List<JingdianNum> list = dao.jingdianNumList();
+        System.out.println("查询所有的 景点数量"+list.toString());
+        return list;
+    }
+
+    /**
+     * 查询各种类型的游记  按景点，购物，美食，住宿
+     * @param model
+     */
+    @RequestMapping(value="/search")
+    //HttpServletRequest req
+    public String search(Model model) throws Exception {
+        System.out.println("/list");
+        //List<TravelBean> list =  userService.TravelList();
+        //model.addAttribute("travelbeans",list);
+        return "travelcity";
+    }
+
+    /**
+     * 找到每篇文章中出现的景点
+     * 找出景点的经纬度
+     * @param model
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value="/articleJing")
+    @ResponseBody//返回json格式数据
+    public List<JingdianNum> articleJing(Model model,String city) throws Exception {
+        System.out.println("/articleJing");
+        //获取文章，清洗数据，找到景点
+        content.replaceAll("http(s)?://[a-zA-Z0-9/\\\\.#=_-]+","")
+        .replaceAll("\\n","");
+        System.out.println("内容2："+content+" city:"+city);
+        //找到一个集合，获取对应的经纬度
+        JingdianDao dao = new JingdianDao();
+        List<JingdianNum> jingdianNums = new ArrayList<>();
+        List<String> jingdians = FileUtil.JingdianList(content,city);
+        System.out.println("景点："+jingdians.toString());
+        for(String j : jingdians){
+            System.out.println("articleJing:"+j);
+            JingdianNum jingdianNum = dao.JingdianDetail(j);
+            if(jingdianNum != null)
+                jingdianNums.add(jingdianNum);
+        }
+        System.out.println("jing:"+jingdianNums.toString());
+        return jingdianNums;
+    }
+
 }
 

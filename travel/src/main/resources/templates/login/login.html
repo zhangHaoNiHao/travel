@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta content="" name="description" />
+    <meta content="" name="author" />
+    <link href="../media/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <link href="../media/css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css"/>
+    <link href="../media/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+    <link href="../media/css/style-metro.css" rel="stylesheet" type="text/css"/>
+    <link href="../media/css/style.css" rel="stylesheet" type="text/css"/>
+    <link href="../media/css/style-responsive.css" rel="stylesheet" type="text/css"/>
+    <link href="../media/css/default.css" rel="stylesheet" type="text/css" id="style_color"/>
+    <link href="../media/css/uniform.default.css" rel="stylesheet" type="text/css"/>
+    <link href="../media/css/login.css" rel="stylesheet" type="text/css"/>
+    <link rel="shortcut icon" href="../media/image/favicon.ico" />
+
+    <script src="../js/jquery.min.js" type="text/javascript"></script>
+    <script	src="../layer/layer.js" type="text/javascript">	</script>
+</head>
+<body class="login">
+<!-- logo -->
+<div class="logo">
+    <img src="../media/image/logo-big.png" alt="" />
+</div>
+
+<!-- 开始登录 -->
+<div class="content">
+
+    <!-- 登录表格开始 class="form-vertical login-form" action="/login1" method="post" -->
+    <form id="loginform" >
+
+        <h3 class="form-title">登录</h3>
+        <div class="alert alert-error hide">
+            <button class="close" data-dismiss="alert"></button>
+            <span>请输入用户名和密码</span>
+        </div>
+
+        <div class="control-group">
+            <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+            <label class="control-label visible-ie8 visible-ie9">用户名</label>
+            <div class="controls">
+                <div class="input-icon left">
+                    <i class="icon-user"></i>
+                    <!--onBlur="checkIsExist()"-->
+                    <input class="m-wrap placeholder-no-fix"  onBlur="checkIsExist()" type="text" placeholder="Username" name="username"  id="username"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label visible-ie8 visible-ie9">密码</label>
+            <div class="controls">
+                <div class="input-icon left">
+                    <i class="icon-lock"></i>
+                    <input class="m-wrap placeholder-no-fix" type="password" placeholder="Password" name="password" id="password"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <label class="checkbox">
+                <input type="checkbox" name="remember" value="1"/> 记住密码
+            </label>
+            <!--onclick="login()" type="submit" <i class="m-icon-swapright m-icon-white"></i>-->
+            <button type="button" onclick="login()" class="btn green pull-right">登录
+                <i class="m-icon-swapright m-icon-white"></i>
+            </button>
+        </div>
+
+        <div class="create-account">
+            <p>还没有账户 ?&nbsp;
+                <a href="javascript:;" id="register-btn" class="">注册账户</a>
+            </p>
+        </div>
+    </form>
+
+    <!-- 开始注册账户 表格  action="UserServlet" method="post"-->
+    <form class="form-vertical register-form" >
+        <h3 class="">注 册</h3>
+        <p>输入账户的详细信息 :</p>
+        <div class="control-group">
+            <label class="control-label visible-ie8 visible-ie9">用户名</label>
+            <div class="controls">
+                <div class="input-icon left">
+                    <i class="icon-user"></i>
+                    <input class="m-wrap placeholder-no-fix" type="text" placeholder="Username" name="register_username" id="register_username"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label visible-ie8 visible-ie9">密码</label>
+            <div class="controls">
+                <div class="input-icon left">
+                    <i class="icon-lock"></i>
+                    <input class="m-wrap placeholder-no-fix" type="password" id="register_password" placeholder="Password" name="register_password" />
+                </div>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label visible-ie8 visible-ie9">重新输入密码</label>
+            <div class="controls">
+                <div class="input-icon left">
+                    <i class="icon-ok"></i>
+                    <input class="m-wrap placeholder-no-fix" type="password" placeholder="Re-type Your Password" name="rpassword"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+            <label class="control-label visible-ie8 visible-ie9">邮箱</label>
+            <div class="controls">
+                <div class="input-icon left">
+                    <i class="icon-envelope"></i>
+                    <input class="m-wrap placeholder-no-fix" type="text" placeholder="Email" name="email" id="email"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button id="register-back-btn" type="button" class="btn">
+                <i class="m-icon-swapleft"></i>  Back
+            </button>
+            <!-- type="submit"  -->
+            <button id="register-submit-btn" class="btn green pull-right">
+                注册 <i class="m-icon-swapright m-icon-white"></i>
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- 开始 js(在底部加载js,会减少加载时间) -->
+<script src="../media/js/jquery-migrate-1.2.1.min.js" type="text/javascript"></script>
+<script src="../media/js/jquery-ui-1.10.1.custom.min.js" type="text/javascript"></script>
+<script src="../media/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="../media/js/jquery.slimscroll.min.js" type="text/javascript"></script>
+<script src="../media/js/jquery.blockui.min.js" type="text/javascript"></script>
+<script src="../media/js/jquery.cookie.min.js" type="text/javascript"></script>
+<script src="../media/js/jquery.uniform.min.js" type="text/javascript" ></script>
+<script src="../media/js/jquery.validate.min.js" type="text/javascript"></script>
+<script src="../media/js/app.js" type="text/javascript"></script>
+<script src="../media/js/login.js" type="text/javascript"></script>
+
+<script>
+    jQuery(document).ready(function() {
+        App.init();
+        Login.init();
+    });
+</script>
+
+<script type="text/javascript">
+    /*
+    function sub(){
+        if(!check()){
+            return false;
+        }
+        var form = document.getElementById("loginform");
+        form.submit();
+    }
+    */
+</script>
+
+<script type="text/javascript">
+
+    //判断用户名是否存在
+    function checkIsExist() {
+        var username = $.trim($("#username").val());
+        $.ajax({
+            "url": "/checkIsExit",
+            "data": {"username": username},
+            "async": false,
+            "type": "get",
+            "dataType": "json",
+            "success": function (data) {
+                if (data == 1) {
+                } else {
+                    layer.alert('用户名不存在', {
+                        skin: 'layui-layer-molv' //样式类名
+                        , closeBtn: 0
+                    });
+                    //将内容清空
+                    document.getElementById("username").value = "";
+                }
+            }
+        });
+    }
+    //登录
+    function login() {
+        var username = $.trim($("#username").val());
+        var password = $.trim($("#password").val());
+
+        $.ajax({
+            "url": "/login1",
+            "data": {
+                password : password,
+                username : username
+            },
+            "async": false,
+            "type": "get",
+            "dataType": "json",
+            "success": function (data) {
+                if (data == 0) {
+                    layer.alert('密码错误', {
+                        skin: 'layui-layer-molv' //样式类名
+                        ,closeBtn: 0
+                    });
+                    //将内容清空
+                    document.getElementById("username").value="";
+                } else {
+                    window.location.href = encodeURI("/index");
+                }
+            }
+        });
+    }
+</script>
+</body>
+</html>

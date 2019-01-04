@@ -1,0 +1,79 @@
+
+<ul class="page-sidebar-menu" th:fragment="left" xmlns:th="http://www.w3.org/1999/xhtml">
+
+    <li>
+        <div class="sidebar-toggler hidden-phone"></div>
+    </li>
+    <li>
+        <!--<form class="sidebar-search">
+            <div class="input-box">
+                <a href="javascript:;" class="remove"></a>
+                <input type="text" placeholder="查找1..." />
+                <input type="button" class="submit" value=" " />
+            </div>
+        </form>-->
+    </li>
+    <li class="start active ">
+        <a href="/index">
+            <i class="icon-home"></i>
+            <span class="title">首页</span>
+            <span class="selected"></span>
+        </a>
+    </li>
+    <li class="">
+        <a href="javascript:;">
+            <i class="icon-cogs"></i>
+            <span class="title">游记</span>
+            <span class="arrow "></span>
+        </a>
+        <ul class="sub-menu">
+            <li >
+                <a href="/TravelList?currPage=1&city=all">游记列表</a>
+            </li>
+            <li ><!--找到景点所在的城市，展示城市的游记和景点列表，景点的照片墙-->
+                <a href="/search?currPage=1&city=all">景点列表</a>
+            </li>
+            <li >
+                <a href="/youjilist">美食手册</a>
+            </li>
+            <!--<li >
+                <a href="/list">推荐手册</a>
+            </li>-->
+        </ul>
+    </li>
+
+    <li class="">
+        <a href="javascript:;">
+            <i class="icon-briefcase"></i>
+            <span class="title">用户管理</span>
+            <span class="arrow "></span>
+        </a>
+        <ul class="sub-menu">
+            <li >
+                <a href="/UserInfo">
+                    <i class="icon-time"></i>
+                    用户信息</a>
+            </li>
+            <li >
+                <a href="/Userlist">
+                    <i class="icon-cogs"></i>
+                    用户管理</a>
+            </li>
+            <li >
+                <a href="/RightM">
+                    <i class="icon-cogs"></i>
+                    权限管理</a>
+            </li>
+        </ul>
+    </li>
+
+</ul>
+<script>
+    $(function () {
+        $(".page-sidebar-menu a").bind("click",function (e) {
+            $(this).parent().siblings().removeClass("active")
+            $(this).parent().addClass("active")
+        })
+    })
+
+</script>

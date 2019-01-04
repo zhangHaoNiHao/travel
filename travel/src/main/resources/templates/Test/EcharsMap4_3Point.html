@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../js/jquery.min.js" type="text/javascript"></script>
+    <script src="../js/echarts.min.js"></script>
+    <script src="../js/china.js"></script>
+
+</head>
+<body>
+<h1>map</h1>
+<div id="main" style="width: 600px;height:400px;"></div>
+</body>
+
+<script>
+    var myChart = echarts.init(document.getElementById('main'));
+    //各省份的地图json文件
+    var provinces = {
+        '上海': '../datajson/data-1482909900836-H1BC_1WHg.json',
+        '河北': '../datajson/data-1482909799572-Hkgu_yWSg.json',
+        '山西': '../datajson/data-1482909909703-SyCA_JbSg.json',
+        '内蒙古': '../datajson/data-1482909841923-rkqqdyZSe.json',
+        '辽宁': '../datajson/data-1482909836074-rJV9O1-Hg.json',
+        '吉林': '../datajson/data-1482909832739-rJ-cdy-Hx.json',
+        '黑龙江': '../datajson/data-1482909803892-Hy4__J-Sx.json',
+        '江苏': '../datajson/data-1482909823260-HkDtOJZBx.json',
+        '浙江': '../datajson/data-1482909960637-rkZMYkZBx.json',
+        '安徽': '../datajson/data-1482909768458-HJlU_yWBe.json',
+        '福建': '../datajson/data-1478782908884-B1H6yezWe.json',
+        '江西': '../datajson/data-1482909827542-r12YOJWHe.json',
+        '山东': '../datajson/data-1482909892121-BJ3auk-Se.json',
+        '河南': '../datajson/data-1482909807135-SJPudkWre.json',
+        '湖北': '../datajson/data-1482909813213-Hy6u_kbrl.json',
+        '湖南': '../datajson/data-1482909818685-H17FOkZSl.json',
+        '广东': '../datajson/data-1482909784051-BJgwuy-Sl.json',
+        '广西': '../datajson/data-1482909787648-SyEPuJbSg.json',
+        '海南': '../datajson/data-1482909796480-H12P_J-Bg.json',
+        '四川': '../datajson/data-1482909931094-H17eKk-rg.json',
+        '贵州': '../datajson/data-1482909791334-Bkwvd1bBe.json',
+        '云南': '../datajson/data-1482909957601-HkA-FyWSx.json',
+        '西藏': '../datajson/data-1482927407942-SkOV6Qbrl.json',
+        '陕西': '../datajson/data-1482909918961-BJw1FyZHg.json',
+        '甘肃': '../datajson/data-1482909780863-r1aIdyWHl.json',
+        '青海': '../datajson/data-1482909853618-B1IiOyZSl.json',
+        '宁夏': '../datajson/data-1482909848690-HJWiuy-Bg.json',
+        '新疆': '../datajson/data-1482909952731-B1YZKkbBx.json',
+        '北京': '../datajson/data-1482818963027-Hko9SKJrg.json',
+        '天津': '../datajson/data-1482909944620-r1-WKyWHg.json',
+        '重庆': '../datajson/data-1482909775470-HJDIdk-Se.json',
+        '香港': '../datajson/data-1461584707906-r1hSmtsx.json',
+        '澳门': '../datajson/data-1482909771696-ByVIdJWBx.json'
+    };
+
+    //各省份的数据
+    var allData = [
+        {name: '北京'},
+        {name: '天津'},
+        {name: '上海'},
+        {name: '重庆'},
+        {name: '河北'},
+        {name: '河南'},
+        {name: '云南'},
+        {name: '辽宁'},
+        {name: '黑龙江'},
+        {name: '湖南'},
+        {name: '安徽'},
+        {name: '山东'},
+        {name: '新疆'},
+        {name: '江苏'},
+        {name: '浙江'},
+        {name: '江西'},
+        {name: '湖北'},
+        {name: '广西'},
+        {name: '甘肃'},
+        {name: '山西'},
+        {name: '内蒙古'},
+        {name: '陕西'},
+        {name: '吉林'},
+        {name: '福建'},
+        {name: '贵州'},
+        {name: '广东'},
+        {name: '青海'},
+        {name: '西藏'},
+        {name: '四川'},
+        {name: '宁夏'},
+        {name: '海南'},
+        {name: '台湾'},
+        {name: '香港'},
+        {name: '澳门'}];
+    //地图中的地点 经纬度和名称
+    var geoCoordMap = { //为了保证饼图不互相重叠，我对经纬坐标进行了调整
+        '上海':  [121.472644,  31.231706],
+        '云南':  [102.712251,  24.040609],
+        '内蒙古':  [111.670801,  40.818311],
+        '北京':  [116.405285,  39.904989],
+        '台湾': [121.509062, 25.044332],
+        '吉林':  [125.3245,  43.886841],
+        '四川':  [103.065735,  30.659462],
+        '天津':  [119.190182,  39.125596],
+        '宁夏':  [106.278179,  38.46637],
+        '安徽':  [117.283042,  31.86119],
+        '山东':  [118.000923,  36.675807],
+        '山西':  [112.049248,  37.057014],
+        '广东':  [113.280637,  23.125178],
+        '广西':  [108.320004,  22.82402],
+        '新疆':  [87.617733,  43.792818],
+        '江苏':  [119.467413,  33.741544],
+        '江西':  [115.892151,  28.676493],
+        '河北':  [114.802461,  37.745474],
+        '河南':  [113.665412,  33.757975],
+        '浙江':  [120.153576,  29.287459],
+        '海南':  [110.33119,  20.031971],
+        '湖北':  [113.298572,  30.984355],
+        '湖南':  [112.12279,  28.19409],
+        // '澳门': [113.54909, 22.198951],
+        '甘肃':  [103.823557,  36.058039],
+        '福建':  [119.306239,  26.075302],
+        '西藏':  [91.132212,  29.660361],
+        '贵州':  [106.713478,  26.578343],
+        '辽宁':  [123.029096,  41.396767],
+        '重庆':  [106.504962,  29.933155],
+        '陕西':  [108.948024,  34.263161],
+        '青海':  [100.578916,  36.623178],
+        // '香港': [114.173355, 22.320048],
+        '黑龙江':  [126.642464,  46.756967],
+    }
+
+    var typeArr = ["男性", "女性", "城镇人口", "农村人口"];
+    var typeIndex = 1;
+    var nametext = "定制地图区域饼图数据统计";
+    var data = [];
+    //给每个省赋值
+    for (var i = 0; i < allData.length; i++) {
+        allData[i].value = Math.round(Math.random() * 100);
+    }
+
+    //初始化全国地图
+    loadMap('../datajson/data-1527045631990-r1dZ0IM1X.json', 'china');
+    var timeFn = null;
+
+    //单击切换到省级地图，当mapCode有值,说明可以切换到下级地图
+    myChart.on('click', function(params) {
+        console.log("点击事件参数：")
+        clearTimeout(timeFn);
+        //由于单击事件和双击事件冲突，故单击的响应事件延迟250毫秒执行
+        timeFn = setTimeout(function() {
+            var name = params.name; //地区name
+            console.log("点击事件参数："+name)
+            var mapCode = provinces[name]; //地区的json数据
+            console.log("根据参数，获得mapCode："+mapCode)
+            if (!mapCode) {
+                alert('无此区域地图显示');
+                return;
+            }
+            //如果获得mapCode,加载地图
+            loadMap(mapCode, name);
+        }, 250);
+    });
+    // 绑定双击事件，返回全国地图
+    myChart.on('dblclick', function(params) {
+        //当双击事件发生时，清除单击事件，仅响应双击事件
+        clearTimeout(timeFn);
+        //返回全国地图
+        loadMap('../datajson/data-1527045631990-r1dZ0IM1X.json', 'china');
+    });
+
+     //变换地图数据（格式）：pie 总数
+     /*
+     function convertMapDta(type, data) {
+         var mapData = [];
+         data.forEach(function(v) {
+             v.value.forEach(function(v1) {
+                 if (String(v1.name) === String(type)) {
+                     // 数据格式：data: [120, 200, 150, 80]
+                     mapData.push({
+                         "name": v.name,
+                         "value": v1.value
+                     })
+                 }
+             })
+         });
+         return mapData;
+     }
+     */
+
+    /**
+     获取对应的json地图数据，然后向echarts注册该区域的地图，最后加载地图信息
+     @params {String} mapCode:json数据的地址
+     @params {String} name: 地图名称
+     */
+    function loadMap(mapCode, name) {
+        if(name == 'china'){
+            data = [];
+            console.log("全国")
+            var mapdata1 = [];
+            $.get(mapCode, function(geoJson) {
+                var option = null;
+                echarts.registerMap(name, geoJson);
+                var mapFeatures = echarts.getMap(name).geoJson.features;
+                mapFeatures.forEach(function(v) {
+                    // 地区名称 对应的经纬度赋值
+                    var name = v.properties.name;
+                    // 地区经纬度
+                    // geoCoordMap[name] = v.properties.cp;
+
+                    //给饼图赋值
+                    var s1 = Math.round(Math.random() * 100 + 10);
+                    var s2 = Math.round(Math.random() * 100 + 10);
+                    data.push({  //data的数量也是饼图的数量
+                        // 需要挨个处理各地区数据（不使用随机产生的数）：另外需要构造的数据是柱图数据
+                        "name": name,
+                        "value": [
+                            {name: "男性",value: s1,},
+                            {name: "女性",value: s2,},
+                        ]
+                    })
+                    //总量
+                    mapdata1.push({
+                        name: name,
+                        value: s1 + s2
+                    })
+                    //console.log("数量："+mapdata1.value)
+                });
+
+                // var mapdata1=[{name:"冷水江市",value:data[0]},{},{},{},{},{}]
+                /*addPie*/
+                function addPie(chart, data) {
+                    console.log("画饼图。。。")
+                    var op = chart.getOption();
+                    var sd = option.series;
+
+                    for (var i = 0; i < data.length; i++) {
+                        var randomValue = 15;
+                        var radius = randomValue;
+                        var geoCoord = geoCoordMap[data[i].name];
+                        if (geoCoord) {
+                            var vr = [];
+                            (data[i].value).map(function(v, j) {
+                                vr.push({
+                                    name: v.name,
+                                    value: v.value,
+                                    visualMap:false
+                                });
+                            });
+                            var p = chart.convertToPixel({
+                                seriesIndex: 0
+                            }, geoCoord);
+                            sd.push({
+                                name: data[i].name,
+                                type: 'pie',
+                                tooltip: {
+                                    formatter: function(params) {
+                                        return params.seriesName + "<br/>" + params.name + " : " + params.value+'万人';
+                                    }
+                                },
+                                radius: radius,
+                                center: p,
+                                data: vr,
+                                // zlevel:1,
+                                label: {
+                                    normal: {
+                                        show: false,
+                                    },
+                                },
+                                labelLine: {
+                                    normal: {
+                                        show: false
+                                    }
+                                },
+                                itemStyle: {
+                                    mormal: {
+                                        opacity: 0.1
+                                    }
+                                }
+                            });
+                        }
+                    }
+                    return sd;
+                };
+                /* 指定图表的配置项和数据:pie*/
+                var option = {
+                    title: {
+                        text: nametext,
+                        left: 'center',
+                        textStyle: {
+                            color: 'black'
+                        }
+                    },
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: function(params) {
+                            if (params.value) {
+                                return params.name + "<br/>" + '总人口' +
+                                    ": " + params.value + '万人';
+                            }
+                        }
+                    },
+                    visualMap: {
+                        type: 'continuous',
+                        show: true,
+                        min: 0,
+                        max: 200,
+                        left: 'left',
+                        top: 'bottom',
+                        text: ['高    (亿元)', '低    (亿元)'], // 文本，默认为数值文本
+                        calculable: true,
+                        seriesIndex: [0],
+                        inRange: {
+                            color:['lightskyblue','yellow','orangered']
+                        }
+                    },
+                    series: [{
+                        name: 'chinaMap',
+                        type: 'map',
+                        mapType: name,
+                        roam: true,
+                        label: {
+                            normal: { show: true,color: 'black',fontSize: 13},
+                            emphasis: { show: true }
+                        },
+                        data: mapdata1 //convertMapDta(typeArr[typeIndex],data)      //mapdata1 //convertMapDta(typeArr[typeIndex],data),
+                    }]
+                };
+                if (option && typeof option === "object") {
+                    myChart.setOption(option, true);
+                }
+                /*pie*/
+                addPie(myChart, data);
+                myChart.setOption(option, true);
+                /*饼图跟着地图移动:pie*/
+                myChart.on('georoam', function(params) {
+                    resetPie(myChart, params, geoCoordMap, typeIndex);
+                });
+                myChart.on('datarangeselected', function(params) {
+                    resetPie(myChart, params, geoCoordMap, typeIndex);
+                });
+                window.addEventListener("resize", function() {
+                    myChart.resize();
+                    resetPie(myChart, 0, geoCoordMap);
+                })
+                console.log("option"+option)
+                myChart.setOption(option);
+            })
+
+
+        }
+        else{
+            //myChart.setOption(null);
+            // 需要给各个市统计每个市的前5个景点，并按照点进行显示
+            var data2 = [];
+            data = [];
+            var geoCoordMap1 = [];
+            myChart.setOption({
+                series:[]
+            },true);
+            console.log(myChart.getOption())
+
+            var max = 480, min = 9; // todo
+            var maxSize4Pin = 100, minSize4Pin = 20;
+
+            console.log("地方："+name)
+            $.get(mapCode, function(geoJson) {
+                var option11 ;
+                echarts.registerMap(name, geoJson);
+                var mapFeatures = echarts.getMap(name).geoJson.features;
+                mapFeatures.forEach(function(v) {
+                    // 地区名称
+                    var name = v.properties.name;
+                    // 地区经纬度
+                    geoCoordMap1[name] = v.properties.cp;
+                    //给饼图赋值
+
+                    //通过Ajax获取该省的所有游记个数
+                    var s1 = Math.round(Math.random() * 100 + 10);
+                    data2.push({
+                        // 需要挨个处理各地区数据（不使用随机产生的数）：另外需要构造的数据是柱图数据
+                        "name": name,
+                        "value": s1,
+                    })
+
+                });
+                // 地理坐标图(打印出来方便查看)
+
+                // 变换地图数据（格式）：
+                var convertData1 = function(data) {
+                    var res = [];
+                    for (var i = 0; i < data.length; i++) {
+                        var geoCoord = geoCoordMap1[data[i].name];
+                        if (geoCoord) {
+                            res.push({
+                                name: data[i].name,
+                                value: geoCoord.concat(data[i].value)
+                            });
+                        }
+                    }
+                    return res;
+                };
+
+                /* 指定图表的配置项和数据:pie*/
+                option11 = {
+                    title: {
+                        text: name+"热点景点分布图",
+                        subtext: '',
+                        x: 'center',
+                        textStyle: {
+                            color: '#ccc'
+                        }
+                    },
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: function (params) {
+                            if(typeof(params.value)[2] == "undefined"){
+                                return params.name + ' : ' + params.value;
+                            }else{
+                                return params.name + ' : ' + params.value[2];
+                            }
+                        }
+                    },
+                    legend: {
+                        orient: 'vertical',
+                        y: 'bottom',
+                        x: 'right',
+                        data: ['credit_pm2.5'],
+                        textStyle: {
+                            color: '#fff'
+                        }
+                    },
+                    visualMap: {
+                        show: false,
+                        min: 0,
+                        max: 100,
+                        left: 'left',
+                        top: 'bottom',
+                        text: ['高', '低'], // 文本，默认为数值文本
+                        calculable: true,
+                        seriesIndex: [1],
+                        inRange: {
+                            color:['lightskyblue','yellow','orangered']
+                        }
+                    },
+                    geo: {
+                        show: true,
+                        map: name,
+                        label: {
+                            normal: {
+                                show: false
+                            },
+                            emphasis: {
+                                show: false,
+                            }
+                        },
+                        roam: true,
+                        itemStyle: {
+                            normal: {
+                                areaColor: '#031525',
+                                borderColor: '#3B5077',
+                            },
+                            emphasis: {
+                                areaColor: '#2B91B7',
+                            }
+                        }
+                    },
+                    series : [
+
+                        {
+                            name: 'credit_pm2.5',
+                            type: 'scatter',
+                            coordinateSystem: 'geo',
+                            data: convertData1(data2),
+                            symbolSize: function (val) {
+                                return val[2] / 10;
+                            },
+                            label: {
+                                normal: {//静态的时候显示的默认样式
+                                    formatter: '{b}',
+                                    position: 'right',
+                                    show: false  //设置标签是否显示
+                                },
+                                emphasis: { //鼠标移入动态的时候显示的默认样式
+                                    show: false //地点名称是否显示
+                                }
+                            },
+                            itemStyle: {
+                                normal: {
+                                    color: 'black' //'#05C3F9'
+                                }
+                            }
+                        },
+                        {
+                            type: 'map',
+                            map: name,
+                            geoIndex: 0,
+                            aspectScale: 0.75, //长宽比
+                            showLegendSymbol: false, // 存在legend时显示
+                            label: {
+                                normal: {
+                                    show: false
+                                },
+                                emphasis: {
+                                    show: false,
+                                    textStyle: {
+                                        color: '#fff'
+                                    }
+                                }
+                            },
+                            roam: true,
+                            itemStyle: {
+                                normal: {
+                                    areaColor: '#031525',
+                                    borderColor: '#3B5077',
+                                },
+                                emphasis: {
+                                    areaColor: '#2B91B7'
+                                }
+                            },
+                            animation: false,
+                            data: data2 //每个点的值
+                        },
+                        {
+                            name: '点',
+                            type: 'scatter',
+                            coordinateSystem: 'geo',
+                            symbol: 'pin',
+                            symbolSize: function (val) {
+                                var a = (maxSize4Pin - minSize4Pin) / (max - min);
+                                var b = minSize4Pin - a*min;
+                                b = maxSize4Pin - a*max;
+                                return a*val[2]+b;
+                            },
+                            label: {
+                                normal: {
+                                    show: true,
+                                    textStyle: {
+                                        color: '#fff',
+                                        fontSize: 9,
+                                    }
+                                }
+                            },
+                            itemStyle: {
+                                normal: {
+                                    color: '#F62157', //标志颜色
+                                }
+                            },
+                            zlevel: 6,
+                            data: convertData1(data2),
+                        },
+                        {
+                            name: 'Top 5',
+                            type: 'effectScatter',
+                            coordinateSystem: 'geo',
+                            data: convertData1(data2.sort(function (a, b) {
+                                return b.value - a.value;
+                            }).slice(0, 5)),
+                            symbolSize: function (val) {
+                                return val[2] / 10;
+                            },
+                            showEffectOn: 'render',
+                            rippleEffect: {
+                                brushType: 'stroke'
+                            },
+                            hoverAnimation: true,
+                            label: {
+                                normal: {
+                                    formatter: '{b}',
+                                    position: 'right',
+                                    show: true
+                                }
+                            },
+                            itemStyle: {
+                                normal: {
+                                    color: '#05C3F9',
+                                    shadowBlur: 10,
+                                    shadowColor: '#05C3F9'
+                                }
+                            },
+                            zlevel: 1
+                        },
+                    ]
+                };
+                myChart.setOption(option11);
+            });
+
+        }
+    }
+
+
+     /*resetPie*/
+     function resetPie(myChart, params, geoCoordMap, typeIndex) {
+         var op = myChart.getOption();
+         var ops = op.series;
+         ops.forEach(function(v, i) {
+             if (i > 0) {
+                 var geoCoord = geoCoordMap[v.name];
+                 var p = myChart.convertToPixel({
+                     seriesIndex: 0
+                 }, geoCoord);
+                 v.center = p;
+                 if (params != 0 && params.zoom) {
+                     v.radius = v.radius * params.zoom;
+                 }
+                 if (params != 0 && params.selected) {
+                     var rangeFirstNumber = params.selected[0];
+                     var rangeSecondNumber = params.selected[1];
+                     var pd = v.data[typeIndex].value;
+                     if (pd < rangeFirstNumber || pd > rangeSecondNumber) {
+                         v.itemStyle.normal.opacity = 0;
+                     } else {
+                         v.itemStyle.normal.opacity = 1;
+                     }
+                 }
+             }
+         });
+         myChart.setOption(op, true);
+     }
+</script>
+</html>

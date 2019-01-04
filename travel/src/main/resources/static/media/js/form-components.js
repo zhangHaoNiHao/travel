@@ -301,7 +301,7 @@ var FormComponents = function () {
     var handleSelec2 = function () {
 
         $('#select2_sample1').select2({
-            placeholder: "Select an option",
+            placeholder: "选择城市",
             allowClear: true
         });
 

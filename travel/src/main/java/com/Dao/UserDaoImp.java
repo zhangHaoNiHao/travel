@@ -2,6 +2,7 @@ package com.Dao;
 
 import com.Bean.TravelBean;
 import com.Bean.UserBean;
+import com.utils.JDBCUtil1;
 import com.utils.RowMap;
 import com.utils.jdbcUtils;
 import org.junit.Test;
@@ -45,7 +46,7 @@ public class UserDaoImp implements UserDao{
             public TravelBean rowMapping(ResultSet rs) {
                 TravelBean u = null;
                 try {
-                    u = new TravelBean(rs.getInt("id"),rs.getString("title"),rs.getString("travel"));
+                    u = new TravelBean(rs.getInt("id"),rs.getString("title"),rs.getString("content"));
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -62,7 +63,7 @@ public class UserDaoImp implements UserDao{
 			public TravelBean rowMapping(ResultSet rs) {
 				TravelBean u = null;
 				try {
-					u = new TravelBean(rs.getInt("id"),rs.getString("title"),rs.getString("travel"));
+					u = new TravelBean(rs.getInt("id"),rs.getString("title"),rs.getString("content"));
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
@@ -93,9 +94,12 @@ public class UserDaoImp implements UserDao{
 		
 		return list;	
 	}
-	
+
+	/***
+	 * 查询所有用户
+	 */
 	public List<UserBean> Userlist() throws Exception{
-		List<UserBean> list = jdbcUtils.executeQuery("select * from user", new RowMap<UserBean>(){
+		List<UserBean> list = JDBCUtil1.executeQuery("select * from user", new RowMap<UserBean>(){
 			public UserBean rowMapping(ResultSet rs) {
 				UserBean u = null;
 				try {
@@ -107,6 +111,21 @@ public class UserDaoImp implements UserDao{
 			}
 		}, null);
 		return list;
+	}
+
+	/**
+	 * 根据id查找用户信息
+	 */
+	public UserBean getUserInfoById(int id) throws Exception {
+		String sql = "select * from user where id=?";
+		List<UserBean> users = JDBCUtil1.executeQuery(sql, new RowMap<UserBean>() {
+			public UserBean rowMapping(ResultSet rs) throws SQLException {
+				UserBean bean = new UserBean(id,rs.getString("username"),rs.getString("password"),rs.getString("email"));
+				return bean;
+
+			}
+		},id);
+		return users.get(0);
 	}
 
 

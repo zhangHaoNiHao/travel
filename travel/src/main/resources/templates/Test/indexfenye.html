@@ -1,0 +1,37 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>jQuery简单的分页插件下载 - 站长素材</title>
+</head>
+
+<link rel="stylesheet" href="../media/css/pagination.css" />
+
+<script src="../js/jquery.min.js"></script>
+<script src="../js/pagination.js"></script>
+
+<body>
+<center>
+<div class="box" id="wrap1"></div>
+</center>
+<script type="text/javascript">
+	var onPagechange = function(page){
+		console.log('当前点击页码',page);
+	}
+	var obj = {
+		wrapid:'wrap1', //页面显示分页器容器id
+		total:18891,//总条数
+		pagesize:10,//每页显示10条
+		currentPage:1,//当前页
+		onPagechange:onPagechange,
+		//btnCount:7 页数过多时，显示省略号的边界页码按钮数量，可省略，且值是大于5的奇数
+	}
+	pagination.init(obj);
+</script>
+
+<div style="text-align:center;margin:50px 0; font:normal 14px/24px 'MicroSoft YaHei';">
+<p>适用浏览器：360、FireFox、Chrome、Safari、Opera、傲游、搜狗、世界之窗. 不支持IE8及以下浏览器。</p>
+<p>来源：<a href="http://sc.chinaz.com/" target="_blank">站长素材</a></p>
+</div>
+</body>
+</html>
