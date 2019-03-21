@@ -54,6 +54,14 @@
             CityTravelTop(0);
             JingdianTop(0);
             CityAll();
+
+            var user = '[[${session.user}]]'
+            if(user != ''){
+                console.log("用户："+user.username)
+            }else{
+                console.log("用户未登录")
+            }
+            console.log("用户未登录")
         })
         //查询所有的城市，将他们放在id为select2_sample1的select中
         function CityAll() {
@@ -293,6 +301,8 @@
                             </div>
                         </div>
 
+                        <div class="clearfix"></div>
+
                         <div class="portlet paddingless">
                             <div class="portlet-title line">
                                 <div class="caption"><i class="icon-bell"></i>热门排行</div>
@@ -401,6 +411,7 @@
     }
 
     $(function () {
+        console.log("用户未登录")
         mapLoad(0)
     })
 
@@ -990,6 +1001,7 @@
                         var lat = arr[i].lat;
                         var num = arr[i].num;
                         var jingdian1 = arr[i].jingdian;
+                        var score = arr[i].score;
 
                         var point = new BMap.Point(lng,lat);
                         arr1.push(point);
@@ -998,13 +1010,13 @@
                         map.addOverlay(marker);
                         //city=""  month=0
                         if(city == '' && i == 0){//肯定第一个是景点
-                            var content = "起点景点："+jingdian1+" 热度："+num+" 满意度："+10;
+                            var content = "起点景点："+jingdian1+" 热度："+num+" 满意度："+score;
                             marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
                         }else if(city != '' && i == 0 ){//肯定是起点
                             var content = "起点："+city;
                             marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
                         }else {
-                            var content = "景点："+jingdian1+" 热度："+num+" 满意度："+10;
+                            var content = "景点："+jingdian1+" 热度："+num+" 满意度："+score;
                         }
                         // 将标注添加到地图中
                         addClickHandler(content,marker,map);

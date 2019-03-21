@@ -141,4 +141,15 @@ public class TestController {
         return "Test/search1";
     }
 
+    @RequestMapping(value="/Map1_7")
+    public String Map1_7() {
+        System.out.println("/Map1_7");
+        return "Test/Map1_7";
+    }
+    @RequestMapping(value="/meishiMap071")
+    public String meishiMap071() {
+        System.out.println("/meishiMap071");
+        return "meishi/meishiMap071";
+    }
+
 }

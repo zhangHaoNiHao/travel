@@ -36,30 +36,6 @@
 <!-- END HEAD -->
 <!-- BEGIN BODY -->
 <script>
-    /*
-    $(function () {
-        $.ajax({
-            "url": "/getUsername",
-            "async": false,
-            "type": "get",
-            "dataType": "json",
-            "success": function (data) {
-                if (null != data && "" != data) {
-                    document.getElementById("user").innerHTML = data.username;
-                } else {
-                    layer.alert('请先登录', {
-                        skin: 'layui-layer-molv' //样式类名
-                        , closeBtn: 0
-                    });
-                    setTimeout(function () {
-                        window.location.href = encodeURI("/login");
-                    },3000);
-                }
-            }
-        });
-
-    })
-    */
 
     //获得所有的美食
     function WupinAll(city1,currPage) {
@@ -72,7 +48,6 @@
             "dataType": "json",
             "success": function (data) {
                 if(data != null ){
-					alert("WupinCityAll长度："+data.list.length)
                     var content = "";
                     for(var i=0;i<data.list.length;i++){
                         content += "<tr><td>"+data.list[i].id+"</td><td><a href='/getWupinByid?id="+data.list[i].id+"&currPage=1'>"+data.list[i].wupin+"</a></td><td>"+data.list[i].city1+"</td><td>"+data.list[i].num+"</td></tr>"
@@ -81,7 +56,6 @@
 
                     //寻找第二页的该城市的所有景点
 					count = data.totalCount;
-					alert("WupinCityAll 总数量"+count)
                     var onPagechange = function(page){
                         console.log('当前点击页码',page);
                         WupinAll(city1,page);
@@ -105,7 +79,14 @@
 		var city1 = '[[${city1}]]';
 		var currPage = '[[${currPage}]]';
 		//找所有的景点
-        WupinAll(city1,currPage);
+		if(city1 != ''){
+            WupinAll(city1,currPage);
+		}
+        var wupin = '[[${wupin}]]';
+		if(wupin != ''){
+            WupinSearch(wupin,1);
+		}
+
     })
 
 	function WupinSearch(wupin,currPage) {
@@ -117,7 +98,6 @@
             "dataType": "json",
             "success": function (data) {
                 if(data != null ){
-                    alert("WupinSearch 长度："+data.list.length)
                     var content = "";
                     for(var i=0;i<data.list.length;i++){
                         content += "<tr><td>"+data.list[i].id+"</td><td><a href='/getWupinByid?id="+data.list[i].id+"&currPage=1'>"+data.list[i].wupin+"</a></td><td>"+data.list[i].city1+"</td><td>"+data.list[i].num+"</td></tr>"
@@ -126,7 +106,6 @@
 
                     //寻找第二页的该城市的所有景点
                     count = data.totalCount;
-                    alert("WupinSearch 总数量"+count)
                     var onPagechange = function(page){
                         WupinSearch(wupin,page);
                     }
@@ -226,19 +205,19 @@
 						<!-- 自定义窗口 -->
 						<!-- BEGIN PAGE TITLE & BREADCRUMB-->
 						<h3 class="page-title">
-							美食 <small>search results</small>
+							特产 <small>search results</small>
 						</h3>
 						<ul class="breadcrumb">
 							<li>
 								<i class="icon-home"></i>
-								<a href="../index/index.html">Home</a>
+								<a href="/index">Home</a>
 								<i class="icon-angle-right"></i>
 							</li>
 							<li>
 								<a href="#">游记信息</a>
 								<i class="icon-angle-right"></i>
 							</li>
-							<li><a href="#">物品</a></li>
+							<li><a href="#">特产</a></li>
 						</ul>
 						<!-- END PAGE TITLE & BREADCRUMB-->
 					</div>
@@ -259,7 +238,7 @@
 									<form class="form-search" action="#">
 										<div class="chat-form">
 											<div class="input-cont">
-												<input type="text" id="wupin" placeholder="查询美食..." class="m-wrap" />
+												<input type="text" id="wupin" placeholder="查询特产..." class="m-wrap" />
 											</div>
 											<button type="button" onclick="chaxun()" class="btn green">
 												Search &nbsp;
@@ -273,7 +252,7 @@
 										<thead>
 										<tr>
 											<th><i class="icon-briefcase"></i> ID</th>
-											<th class="hidden-phone"><i class="icon-question-sign"></i> 物品</th>
+											<th class="hidden-phone"><i class="icon-question-sign"></i> 特产</th>
 											<th><i class="icon-bookmark"></i> City</th>
 											<th><i class="icon-bookmark"></i> Number</th>
 										</tr>

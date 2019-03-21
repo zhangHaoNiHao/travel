@@ -1,7 +1,6 @@
 package com.Controller;
 
 import com.Bean.JingdianNum;
-import com.Bean.TravelBean;
 import com.Bean.TravelBean1;
 import com.Bean.UserBean;
 import com.Dao.JingdianDao;
@@ -23,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,67 +30,23 @@ import java.util.List;
 @Controller
 public class dataController {
 
-
-    @Autowired //自动注入
-    private UserService userService;
-    private JingdianService jigndianService;
-
-
-
-
-    @RequestMapping(value="/general")
+    /*@RequestMapping(value="/general")
     public String mgeneral() throws Exception {
         System.out.println("/general");
         return "travel/general";
     }
+*/
 
-
-    @RequestMapping(value="/baidu")
+   /* @RequestMapping(value="/baidu")
     public String baidu() throws Exception {
         System.out.println("/baidu");
         return "map/baidu";
-    }
+    }*/
 
     @RequestMapping(value="/indexMap")
     public String indexMap() throws Exception {
-        System.out.println("/baidu");
+        System.out.println("Test/indexMap");
         return "Test/indexMap";
-    }
-
-
-
-    @RequestMapping(value="/login1")
-    @ResponseBody//返回json格式数据
-    public int login1(HttpServletRequest req, String username,String password) throws Exception {
-        System.out.println("login1 username:"+username+" password："+password);
-        //List<UserBean> userlist = userService.search(username);
-        UserBean userbean = (UserBean) req.getSession().getAttribute("userbean");
-        int a = 0;
-        System.out.println("userlist: "+userbean);
-        if(userbean.getPassword().equals(password)){
-            System.out.println("login1判断成功 "+userbean);
-            req.getSession().setAttribute("user",userbean);
-            a = 1;
-        }
-        else  {
-            System.out.println("login1失败 "+userbean);
-            a = 0;
-        }
-        System.out.println(a);
-        return a;
-    }
-
-    /**
-     * 查询数据库中的游记，列表显示
-     * @param model
-     */
-    @RequestMapping(value="/list")
-    //HttpServletRequest req
-    public String list(Model model) throws Exception {
-        System.out.println("/list");
-        List<TravelBean> list =  userService.TravelList();
-        model.addAttribute("travelbeans",list);
-        return "travel/list";
     }
 
     String content = "";
@@ -107,21 +63,10 @@ public class dataController {
         //System.err.println(list);
         model.addAttribute("travel",list);
         model.addAttribute("city",city);
+        model.addAttribute("id",id);
         return "travel/detail1";
     }
 
-    /**
-     * 查询数据库中的所有游记信息
-     * @return
-     * @throws Exception
-     */
-    @RequestMapping(value="/travelList")
-    @ResponseBody//返回json格式数据
-    public List<TravelBean> travelList() throws Exception {
-        System.out.println("/travelList");
-        List<TravelBean> travelList = userService.searchTravel(null);
-        return travelList;
-    }
 
     /**
      * 返回游记的具体内容
@@ -130,7 +75,7 @@ public class dataController {
      * @return
      * @throws IOException
      */
-    @RequestMapping(value="/listTxt")
+    /*@RequestMapping(value="/listTxt")
     @ResponseBody//返回json格式数据
     public List<String> listTxt() throws IOException {
         System.out.println("/listTxt");
@@ -140,7 +85,7 @@ public class dataController {
             System.out.println("control :"+l);
         }
         return list;
-    }
+    }*/
 
 
     @RequestMapping(value="/getUsername")
@@ -151,7 +96,7 @@ public class dataController {
         return userbean;
     }
 
-    @RequestMapping(value="/getAddress")
+   /* @RequestMapping(value="/getAddress")
     @ResponseBody//返回json格式数据
     public List<String> getAddress(String address) throws Exception {
         System.out.println("address:"+address);
@@ -176,9 +121,9 @@ public class dataController {
         br.close();// 关闭流
         connection.disconnect();// 断开连接
         return list;
-    }
+    }*/
 
-    @RequestMapping(value="/jingdianNum")
+    /*@RequestMapping(value="/jingdianNum")
     @ResponseBody//返回json格式数据
     public List<JingdianNum> jingdianNum() throws Exception {
         JingdianDao dao = new JingdianDao();
@@ -187,7 +132,7 @@ public class dataController {
         System.out.println("查询所有的 景点数量"+list.toString());
         return list;
     }
-
+*/
     /**
      * 查询各种类型的游记  按景点，购物，美食，住宿
      * @param model
@@ -224,8 +169,20 @@ public class dataController {
         for(String j : jingdians){
             System.out.println("articleJing:"+j);
             JingdianNum jingdianNum = dao.JingdianDetail(j);
-            if(jingdianNum != null)
-                jingdianNums.add(jingdianNum);
+
+            if(jingdianNum != null){
+                if(jingdianNum.getScore() != null){
+                    Double score = Double.parseDouble(jingdianNum.getScore());
+                    DecimalFormat df = new DecimalFormat("0.00");
+                    String s = df.format(score);
+                    jingdianNum.setScore(s);
+                    jingdianNums.add(jingdianNum);
+                }else{
+                    jingdianNum.setScore("0.512");
+                    jingdianNums.add(jingdianNum);
+                }
+            }
+
         }
         System.out.println("jing:"+jingdianNums.toString());
         return jingdianNums;

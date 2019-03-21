@@ -75,31 +75,49 @@
             <span class="arrow "></span>
         </a>
         <ul class="sub-menu">
-            <li >
+            <li>
                 <a href="/UserInfo">
                     <i class="icon-time"></i>
                     用户信息</a>
             </li>
-            <li >
+            <li id="juese">
                 <a href="/Userlist">
                     <i class="icon-cogs"></i>
                     用户管理</a>
-            </li>
-            <li >
-                <a href="/RightM">
-                    <i class="icon-cogs"></i>
-                    权限管理</a>
             </li>
         </ul>
     </li>
 
 </ul>
-<!--
+
 <script>
     $(function () {
-        $(".page-sidebar-menu a").bind("click",function (e) {
+        /*$(".page-sidebar-menu a").bind("click",function (e) {
             $(this).parent().siblings().removeClass("active")
             $(this).parent().addClass("active")
-        })
+        })*/
+        /*
+        var user = '[[${session.user}]]';
+        console.log("角色："+user)
+        if(user != '' ){
+        //if(user != null){
+            //var juese1 = user.juese;
+            var juese1 = '[[${session.juese}]]';
+            console.log("角色："+juese1)
+            if(juese1 != '管理员'){
+                console.log("角色111："+juese1)
+                $("#juese").css("display","none")
+            }
+        }
+        else{
+            layer.alert('请先登录111', {
+                skin: 'layui-layer-molv' //样式类名
+                , closeBtn: 0
+            });
+            setTimeout(function () {
+                window.location.href = encodeURI("/login");
+            },1000);
+        }
+        */
     })
-</script>-->
+</script>

@@ -24,7 +24,7 @@ public class JingdianNum {
 	private String lng;
 	private String lat;
 	private int num;
-	private Double score;
+	private String score;
 	public int getId() {
 		return id;
 	}
@@ -85,10 +85,10 @@ public class JingdianNum {
 	public void setNum(int num) {
 		this.num = num;
 	}
-	public Double getScore() {
+	public String getScore() {
 		return score;
 	}
-	public void setScore(Double score) {
+	public void setScore(String score) {
 		this.score = score;
 	}
 	public String getCity1() {
@@ -177,7 +177,7 @@ public class JingdianNum {
 	}
 
 	public JingdianNum(int id, String jingdian, String name, String province, String city, String area, String address,
-					   String lng, String lat, int num, Double score) {
+					   String lng, String lat, int num, String score) {
 		super();
 		this.id = id;
 		this.jingdian = jingdian;
@@ -194,7 +194,7 @@ public class JingdianNum {
 	
 	//获取
 	public JingdianNum(String jingdian, String name, String province, String city, String area, String address,
-			String lng, String lat, int num, Double score) {
+			String lng, String lat, int num, String score) {
 		super();
 		this.jingdian = jingdian;
 		this.name = name;
@@ -270,6 +270,15 @@ public class JingdianNum {
 		this.num = num;
 	}
 
+
+	public JingdianNum(String jingdian, String lng, String lat, int num,String score) {
+		this.jingdian = jingdian;
+		this.lng = lng;
+		this.lat = lat;
+		this.num = num;
+		this.score = score;
+	}
+
 	public JingdianNum(String jingdian, String lng, String lat, int num,boolean visit) {
 		this.jingdian = jingdian;
 		this.lng = lng;
@@ -303,6 +312,30 @@ public class JingdianNum {
 		this.num = num;
 		this.visit = visit;
 		this.photo = photo;
+	}
+
+	public JingdianNum(int id,String jingdian, String city1,String lng, String lat, int num,boolean visit,String photo ,String score) {
+		this.id = id;
+		this.jingdian = jingdian;
+		this.city1 = city1;
+		this.lng = lng;
+		this.lat = lat;
+		this.num = num;
+		this.visit = visit;
+		this.photo = photo;
+		this.score = score;
+	}
+	public JingdianNum(int id,String jingdian, String city1,String city,String lng, String lat, int num,boolean visit,String photo ,String score) {
+		this.id = id;
+		this.jingdian = jingdian;
+		this.city1 = city1;
+		this.city = city;
+		this.lng = lng;
+		this.lat = lat;
+		this.num = num;
+		this.visit = visit;
+		this.photo = photo;
+		this.score = score;
 	}
 
 	public JingdianNum(int id,String jingdian, String city1,String lng, String lat, int num,boolean visit,String photo,String photo3,String photo6,String photo9,String photo12) {

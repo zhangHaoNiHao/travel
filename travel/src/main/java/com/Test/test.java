@@ -102,7 +102,7 @@ public class test {
         }, null);
         return list;
     }
-
+    //文章情感分析
     public static double articleQinggan(String content){
 
         //将所有的链接删除

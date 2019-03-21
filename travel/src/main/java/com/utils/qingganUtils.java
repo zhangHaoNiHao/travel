@@ -12,6 +12,7 @@ import java.util.List;
 import org.json.JSONObject;
 
 import com.baidu.aip.nlp.AipNlp;
+import org.junit.Test;
 
 public class qingganUtils {
     public static final String APP_ID = "14936500";
@@ -73,6 +74,17 @@ public class qingganUtils {
 	    return score;
 	}
 
+	@Test
+	public void testXSD(){
+		HashMap<String, Object> options = new HashMap<String, Object>();
+		options.put("model", "CNN");
+		String first = "美丽的姑娘们跳起甩袖舞，热情的欢迎来宾，一曲舞毕，“扎西德勒”的问候便迎面而来，还为大家献上了洁白的哈达。";
+		String second = "欣赏完迎宾舞蹈，我们还在大堂里遇上了酥油茶制作工艺的展示。";
+		JSONObject res = getInstance().simnet(first,second,options);
+		System.out.println(res.toString(2));
+		Double score =  Double.valueOf(res.get("score").toString());
+		System.out.println("句子相似度为："+score);
+	}
 	/**
 	 * 整篇文章的满意度
 	 * @param content
@@ -126,9 +138,11 @@ public class qingganUtils {
 
     public static void main(String[] args) throws IOException, InterruptedException {
        
-    	System.out.println(xiangsiduUtil("今天天气真好","天气好"));
+    	//System.out.println(xiangsiduUtil("今天天气真好","天气好"));
         //sample1(client);
-		System.out.println(articleQinggan("今天天气真好"));
+		//System.out.println(articleQinggan("美丽的姑娘们跳起甩袖舞，热情的欢迎来宾，一曲舞毕，“扎西德勒”的问候便迎面而来，还为大家献上了洁白的哈达。"));
+		String content = "美丽的姑娘们跳起甩袖舞，热情的欢迎来宾，一曲舞毕，“扎西德勒”的问候便迎面而来，还为大家献上了洁白的哈达。";
+		qingganUtil(content);
     }
     
     public static void sample(AipNlp client) {

@@ -94,4 +94,20 @@ public class WupinBean {
         this.city1 = city1;
         this.travelids = travelids;
     }
+
+    public WupinBean(String city1) {
+        this.city1 = city1;
+    }
+    public WupinBean(String city1,int num) {
+        this.city1 = city1;
+        this.num = num;
+    }
+
+    public WupinBean(int id, String wupin, int num, String city1, String photos) {
+        this.id = id;
+        this.wupin = wupin;
+        this.num = num;
+        this.city1 = city1;
+        this.photos = photos;
+    }
 }

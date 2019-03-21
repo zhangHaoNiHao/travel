@@ -34,18 +34,16 @@
 </headz>
     <script>
         $(function () {  //页面加载完成之后再执行
-            CityTravelTop(0);
-            JingdianTop(0);
+            CityMeishiTop();
+            MeishiTop();
         })
-
         /**
          * 根据季节获取游记最多的城市
          */
-        function CityTravelTop(month) {
+        function CityMeishiTop() {
             //最热城市
             $.ajax({
-                "url": "/CityTravelTop",
-                "data":{"month":month},
+                "url": "/CityMeishiTop",
                 "async": false,
                 "type": "get",
                 "dataType": "json",
@@ -54,35 +52,8 @@
                     content += "<div class='scroller' data-height='290px' data-always-visible='1' data-rail-visible='0'>" +
                         "<ul class='feeds'>"
                     for(var i=0;i<rs.length;i++){
-                        //alert(rs[i].city1)
                         content += "<li><a href='/TravelList?city1="+rs[i].city1+"&currPage=1'><div class='col1'><div class='cont'><div class='cont-col1'><div class='label label-success'><i class='icon-bell'></i>"+
                             "</div></div><div class='cont-col2'><div class='desc'>"+rs[i].city+"</div></div></div></div><div class='col2'><div class='date'>"+rs[i].num+"</div></div></a></li>";
-                    }
-                    //拼接html  cities //feeds
-                    content += "</ul></div>";
-                    $("#tab_1_1").html(content);
-                }
-            });
-        }
-
-        /**
-         * 根据季节获取游览最多的景点
-         */
-        function JingdianTop(month) {
-            //最热景点
-            $.ajax({
-                "url": "/JingdianTop",
-                "data":{"month":month},
-                "async": false,
-                "type": "get",
-                "dataType": "json",
-                "success": function (rs) {
-                    var content ="";
-                    content += "<div class='scroller' data-height='290px' data-always-visible='1' data-rail-visible='0'>" +
-                        "<ul class='feeds'>"
-                    for(var i=0;i<rs.length;i++){
-                        content += "<li><a href='/getJingdianByid?id="+rs[i].id+"&currPage=1'><div class='col1'><div class='cont'><div class='cont-col1'><div class='label label-success'><i class='icon-bell'></i>"+
-                            "</div></div><div class='cont-col2'><div class='desc'>"+rs[i].jingdian+"</div></div></div></div><div class='col2'><div class='date'>"+rs[i].num+"</div></div></a></li>";
                     }
                     //拼接html  cities //feeds
                     content += "</ul></div>";
@@ -90,7 +61,31 @@
                 }
             });
         }
-
+        /**
+         * 根据季节获取最多的美食
+         */
+        function MeishiTop() {
+            //最热景点
+            $.ajax({
+                "url": "/MeishiTop",
+                //"data":{"month":month},
+                "async": false,
+                "type": "get",
+                "dataType": "json",
+                "success": function (rs) {
+                    var content ="";
+                    content += "<div class='scroller' data-height='290px' data-always-visible='1' data-rail-visible='0'>" +
+                        "<ul class='feeds'>"
+                    for(var i=0;i<rs.length;i++){
+                        content += "<li><a href='/getMeishiByid?id="+rs[i].id+"&currPage=1'><div class='col1'><div class='cont'><div class='cont-col1'><div class='label label-success'><i class='icon-bell'></i>"+
+                            "</div></div><div class='cont-col2'><div class='desc'>"+rs[i].meishi+"</div></div></div></div><div class='col2'><div class='date'>"+rs[i].num+"</div></div></a></li>";
+                    }
+                    //拼接html  cities //feeds
+                    content += "</ul></div>";
+                    $("#tab_1_1").html(content);
+                }
+            });
+        }
     </script>
 
 <div class="page-container">
@@ -154,13 +149,13 @@
                     <!-- 自定义窗口 -->
                     <h3 class="page-title">
                         <!--页头  仪表盘-->
-                        首页 <small>statistics and more</small>
+                        美食分布图 <small>statistics and more</small>
                     </h3>
                     <ul class="breadcrumb">
                         <!--当前页面的地址-->
                         <li>
                             <i class="icon-home"></i>
-                            <a href="index.html">首页</a>
+                            <a href="/index">首页</a>
                             <i class="icon-angle-right"></i>
                         </li>
                         <li><a href="#">Dashboard</a></li>
@@ -176,26 +171,26 @@
                     <div class="span9">
                         <div class="tabbable tabbable-custom tabbable-full-width">
                             <ul class="nav nav-tabs">
-                                <li class="active"><a data-toggle="tab" href="#tab_2_2">心情图</a></li>
-                                <li><a data-toggle="tab" href="#tab_2_3" onclick="timemap()">路线图</a></li>
+                                <li class="active"><a data-toggle="tab" href="#tab_2_2">游记美食</a></li>
+                                <!--<li><a data-toggle="tab" href="#tab_2_3" onclick="timemap()">路线图</a></li>-->
                             </ul>
                             <div class="tab-content">
                                 <div id="tab_2_2" class="tab-pane active">
                                     <!-- BEGIN PORTLET-->
                                     <div class="portlet solid bordered light-grey">
                                         <div class="portlet-title">
-                                            <div class="caption"><i class="icon-bar-chart"></i>全国旅游心情图</div>
+                                            <div class="caption"><i class="icon-bar-chart"></i>各省美食图</div>
                                             <div class="tools">
                                                 <div class="btn-group pull-right" data-toggle="buttons-radio">
                                                     <!--<a href="" class="btn mini">Users</a>
                                                     <a href="" class="btn mini active">Feedbacks</a>-->
-                                                    <select name="month" id="month" onchange="ChangeMonth()">
+                                                    <!--<select name="month" id="month" onchange="ChangeMonth()">
                                                         <option value="0">全年</option>
                                                         <option value="1">3-5月</option>
                                                         <option value="2">6-8月</option>
                                                         <option value="3">9-11月</option>
                                                         <option value="4">12-2月</option>
-                                                    </select>
+                                                    </select>-->
                                                 </div>
                                             </div>
                                         </div>
@@ -206,16 +201,16 @@
                                     </div>
                                     <!-- END PORTLET-->
                                 </div>
-                                <div id="tab_2_3" class="tab-pane">
-                                    <!-- BEGIN PORTLET-->
+                                <!--<div id="tab_2_3" class="tab-pane">
+                                    &lt;!&ndash; BEGIN PORTLET&ndash;&gt;
                                     <div class="portlet solid bordered light-grey">
                                         <div class="portlet-title">
                                             <div class="caption"><i class="icon-bar-chart"></i>全国热门旅游路线</div>
 
                                             <div class="tools">
                                                 <div class="btn-group pull-right" data-toggle="buttons-radio">
-                                                    <!--<a href="" class="btn mini">Users</a>
-                                                    <a href="" class="btn mini active">Feedbacks</a>-->
+                                                    &lt;!&ndash;<a href="" class="btn mini">Users</a>
+                                                    <a href="" class="btn mini active">Feedbacks</a>&ndash;&gt;
                                                     <select name="month" id="month1">
                                                         <option value="0">全年</option>
                                                         <option value="1">3-5月</option>
@@ -224,19 +219,19 @@
                                                         <option value="4">12-2月</option>
                                                     </select>
                                                     <input type="text" name="city" id="city" placeholder="起点城市" />
-                                                    <button type="button" id="chaxun" onclick="chaxun()">查询</button>
-                                                </div>
+                                                    <button type="button" id="chaxun" >查询</button>
+                                                </div>&lt;!&ndash;onclick="chaxun()"&ndash;&gt;
 
                                             </div>
                                         </div>
 
                                         <div class="portlet-body">
-                                            <!--加载地图 class="span9"  background-color: #f5f6f0-->
+                                            &lt;!&ndash;加载地图 class="span9"  background-color: #f5f6f0&ndash;&gt;
                                             <div id="allmap" style="width:100%;height:500px;"></div>
                                         </div>
                                     </div>
-                                    <!-- END PORTLET-->
-                                </div>
+                                    &lt;!&ndash; END PORTLET&ndash;&gt;
+                                </div>-->
                                 <!--下一个分页-->
                             </div>
                         </div>
@@ -245,7 +240,7 @@
                         <!-- BEGIN PORTLET-->
                         <div class="portlet paddingless">
                             <div class="portlet-title line">
-                                <div class="caption"><i class="icon-bell"></i>热门排行</div>
+                                <div class="caption"><i class="icon-bell"></i>美食热门排行</div>
                                 <div class="tools">
                                     <a href="" class="collapse"></a>
                                     <a href="#portlet-config" data-toggle="modal" class="config"></a>
@@ -257,8 +252,8 @@
                                 <!--BEGIN TABS-->
                                 <div class="tabbable tabbable-custom">
                                     <ul class="nav nav-tabs">
-                                        <li class="active"><a href="#tab_1_1" data-toggle="tab">最热城市</a></li>
-                                        <li><a href="#tab_1_2" data-toggle="tab">热门景点</a></li>
+                                        <li class="active"><a href="#tab_1_1" data-toggle="tab">热门美食</a></li>
+                                        <li><a href="#tab_1_2" data-toggle="tab">美食热门城市</a></li>
                                     </ul>
                                     <div class="tab-content">
                                         <div class="tab-pane active" id="tab_1_1"></div>
@@ -324,10 +319,7 @@
 
     function ChangeMonth(){
         var month = document.getElementById("month").value;
-        alert(month)
         mapLoad(month)
-        CityTravelTop(month);
-        JingdianTop(month);
     }
 
     $(function () {
@@ -373,49 +365,9 @@
             '香港': '../datajson/data-1461584707906-r1hSmtsx.json',
             '澳门': '../datajson/data-1482909771696-ByVIdJWBx.json'
         };
-        //地图中的地点 经纬度和名称
-        var geoCoordMap = { //为了保证饼图不互相重叠，我对经纬坐标进行了调整
-            '上海':  [121.472644,  31.231706],
-            '云南':  [102.712251,  24.040609],
-            '内蒙古':  [111.670801,  40.818311],
-            '北京':  [116.405285,  39.904989],
-            '台湾': [121.509062, 25.044332],
-            '吉林':  [125.3245,  43.886841],
-            '四川':  [103.065735,  30.659462],
-            '天津':  [119.190182,  39.125596],
-            '宁夏':  [106.278179,  38.46637],
-            '安徽':  [117.283042,  31.86119],
-            '山东':  [118.000923,  36.675807],
-            '山西':  [112.049248,  37.057014],
-            '广东':  [113.280637,  23.125178],
-            '广西':  [108.320004,  22.82402],
-            '新疆':  [87.617733,  43.792818],
-            '江苏':  [119.467413,  33.741544],
-            '江西':  [115.892151,  28.676493],
-            '河北':  [114.802461,  37.745474],
-            '河南':  [113.665412,  33.757975],
-            '浙江':  [120.153576,  29.287459],
-            '海南':  [110.33119,  20.031971],
-            '湖北':  [113.298572,  30.984355],
-            '湖南':  [112.12279,  28.19409],
-            // '澳门': [113.54909, 22.198951],
-            '甘肃':  [103.823557,  36.058039],
-            '福建':  [119.306239,  26.075302],
-            '西藏':  [91.132212,  29.660361],
-            '贵州':  [106.713478,  26.578343],
-            '辽宁':  [123.029096,  41.396767],
-            '重庆':  [106.504962,  29.933155],
-            '陕西':  [108.948024,  34.263161],
-            '青海':  [100.578916,  36.623178],
-            // '香港': [114.173355, 22.320048],
-            '黑龙江':  [126.642464,  46.756967],
-        }
-        var typeIndex = 1;
-        var nametext = "定制地图区域饼图数据统计";
         var data = [];
-
         //初始化全国地图
-        loadMap('../datajson/data-1527045631990-r1dZ0IM1X.json', 'china',kind);
+        loadMap('../datajson/data-1527045631990-r1dZ0IM1X.json', 'china');
 
         var timeFn = null;
         //单击切换到省级地图，当mapCode有值,说明可以切换到下级地图
@@ -440,7 +392,8 @@
             //当双击事件发生时，清除单击事件，仅响应双击事件
             clearTimeout(timeFn);
             //返回全国地图
-            loadMap('../datajson/data-1527045631990-r1dZ0IM1X.json', 'china',kind);
+            //echarts.dispose($("#tooltipBarId1"))
+            loadMap('../datajson/data-1527045631990-r1dZ0IM1X.json', 'china');
         });
 
         /**
@@ -448,21 +401,18 @@
           mapCode:json数据的地址
           name: 地图名称
          */
-        function loadMap(mapCode, name,kind) {
+        function loadMap(mapCode, name) {
             if(name == 'china') {
                 var data2 = [];
                 var max = 0;
-                var data3 = [];
                 data = [];
                 //设置series属性为空，true默认不加载之前的series
                 myChart.setOption({series:[]},true);
-                console.log("地方："+name);
-                var mapData = [];
-
+                console.log("全国："+name);
                 $.get(mapCode, function(geoJson) {
                     var option11 ;
                     echarts.registerMap(name, geoJson);
-                    var mapFeatures = echarts.getMap(name).geoJson.features;
+                    echarts.getMap(name).geoJson.features;
                     //获得每个省的游记总数
                     $.ajax({
                         "url": "/provinceNum",
@@ -471,7 +421,6 @@
                         "type": "get",
                         "dataType": "json",
                         "success": function (rs) {
-                            // alert("长度："+rs.length)
                             if (null != rs && "" != rs) {
                                 for (var i = 0; i < rs.length; i++) {
                                     provincename = rs[i].province;
@@ -487,84 +436,36 @@
                             }
                         }
                     })
-                    /*var cities = [];
-                    mapFeatures.forEach(function(v) {
-                        // 地区名称
-                        var name = v.properties.name;
-                        cities.push(name)
 
-                        console.log("地名："+name)
-                        var s1 = Math.round(Math.random() * 100 + 10);
-                        //各个地区的数量
-                        data2.push({
-                            // 需要挨个处理各地区数据（不使用随机产生的数）：另外需要构造的数据是柱图数据
-                            "name": name,
-                            "value": s1, //地图上的每个地区的值
-                        })
-                    });*/
-                    //查询每个省份的前十10的景点
+                    //查询每个省前5的美食
+                    var data99 = [];
                     $.ajax({
-                        "url": "/AllprovinceTop",
-                        "data":{"kind":kind},//季度
+                        "url": "/ProMeishiTop",
                         "async": false,
                         "type": "get",
                         "dataType": "json",
                         "success": function (rs) {
-                            console.log("景点："+rs[0].jingdian+"  长度："+rs.length);
-                            for(var i=0;i<rs.length;i++){
-                                jingdian = rs[i].jingdian;
-                                lng = rs[i].lng;
-                                lat = rs[i].lat;
-                                jingdiannum = rs[i].num;
-                                mapData[jingdian] = [lng,lat];
-                                console.log("lng: "+lng+"  lat:"+lat)
-                                data3.push({
-                                    "name": jingdian,
-                                    "value": jingdiannum, //气泡提示的值
-                                })
+                            if (rs != null) {
+                                for (var key in rs) {
+                                    //console.log("键：" + key + ",值 ：{姓名："+ rs[key][0].meishi+"}");
+                                    var meishi = [];
+                                    var num = [];
+                                    for (var i = 0; i < rs[key].length; i++) {
+                                        //console.log("省："+key+"  美食："+rs[key][i].meishi+"  数量："+rs[key][i].num)
+                                        meishi.push(rs[key][i].meishi)
+                                        num.push(rs[key][i].num)
+                                    }
+                                    data99.push({
+                                        "province": key,
+                                        "meishi": meishi,
+                                        "num": num
+                                    })
+                                }
                             }
                         }
-                    });
-                    //找到每个市的前5景点
-                    /*$.ajax({
-                        "url": "/cityJingdian",
-                        "data":{"cities":cities},
-                        "async": false,
-                        "type": "get",
-                        "dataType": "json",
-                        "success": function (rs) {
-                            alert("长度："+rs.length)
-                            for(var i=0;i<rs.length;i++){
-                                jingdian = rs[i].jingdian;
-                                lng = rs[i].lng;
-                                lat = rs[i].lat;
-                                jingdiannum = rs[i].num;
+                    })
+                    console.log("***************省"+data99[0].province+"  美食："+data99[0].meishi[0]+"  数量："+data99[0].num[0]);
 
-                                //alert("景点："+jingdian+" 数量"+jingdiannum)
-                                mapData[jingdian] = [lng,lat];
-                                console.log("lng: "+lng+"  lat:"+lat)
-                                data3.push({
-                                    "name": jingdian,
-                                    "value": jingdiannum, //气泡提示的值
-                                })
-                            }
-                        }
-                    });*/
-
-                    // 变换地图数据（格式）：每个点上的值
-                    var convertData1 = function(data) {
-                        var res = [];
-                        for (var i = 0; i < data.length; i++) {
-                            var geoCoord = mapData[data[i].name]
-                            if (geoCoord) {
-                                res.push({
-                                    name: data[i].name, //景点名
-                                    value: geoCoord.concat(data[i].value) //景点值
-                                });
-                            }
-                        }
-                        return res;
-                    };
 
                     /* 指定图表的配置项和数据:pie*/
                     option11 = {
@@ -578,12 +479,53 @@
                         },
                         tooltip: {
                             trigger: 'item',
+                            //position: 'top',//控制提示框的位置
+                            padding: 0,
+                            enterable: true,
+                            transitionDuration: 1,
+                            textStyle: {
+                                color: '#000',
+                                decoration: 'none',
+                            },
+                            position:
+                                function(point, params, dom, rect, size){
+                                    //其中point为当前鼠标的位置，size中有两个属性：viewSize和contentSize，分别为外层div和tooltip提示框的大小
+                                    var x = point[0];//
+                                    var y = point[1];
+                                    var viewWidth = size.viewSize[0];
+                                    var viewHeight = size.viewSize[1];
+                                    var boxWidth = size.contentSize[0];
+                                    var boxHeight = size.contentSize[1];
+                                    var posX = 0;//x坐标位置
+                                    var posY = 0;//y坐标位置
+
+                                    if(x<boxWidth){//左边放不开
+                                        posX = 5;
+                                    }else{//左边放的下
+                                        posX = x-boxWidth;
+                                    }
+
+                                    if(y<boxHeight){//上边放不开
+                                        posY = 5;
+                                    }else{//上边放得下
+                                        posY = y-boxHeight;
+                                    }
+                                    return [posX,posY];
+                                },
                             formatter: function (params) {
-                                if(typeof(params.value)[2] == "undefined"){
-                                    return params.name + ' : ' + params.value;
-                                }else{
-                                    return params.name + ' : ' + params.value[2];
-                                }
+                                console.log("33"+params)
+                                var tipHtml = ''; //' + params.name + '
+                                tipHtml = '<div style="height:200px;width:200px;border-radius:5px;background:#fff;box-shadow:0 0 10px 5px #aaa">' +
+                                    '    <div style="height:30px;width:100%;border-radius:5px;background:#F8F9F9;border-bottom:1px solid #F0F0F0">' +
+                                    '        <span style="line-height:30px;margin-left:18px" id="city" onclick="SearchCity(this.value)">' + params.name + '</span>' +
+                                    '        <span style="float:right;line-height:30px;margin-right:18px;color:#5396E3;cursor:pointer" onclick="mapTooltipClick();">点击查看详情</span>' +
+                                    '    </div>' +
+                                    '    <div id="tooltipBarId" style="height:200px;width:100%;border-radius:0 0 5px 0;background:#fff"></div>' +
+                                    '</div>';
+                                setTimeout(function () {
+                                    tooltipCharts(data99,params.name);
+                                }, 0);
+                                return tipHtml;
                             }
                         },
                         legend: {
@@ -633,13 +575,10 @@
                         },
                         series : [
                             {
+                                //name:'iphone4',
                                 type: 'map',
                                 map: name,
                                 geoIndex: 0,
-                                //aspectScale: 0.75, //长宽比
-                                /*name: 'chinaMap',
-                                type: 'map',
-                                mapType: name,*/
                                 zoom:1.5,
                                 showLegendSymbol: false, // 存在legend时显示
                                 label: {
@@ -667,13 +606,12 @@
                                 animation: false,
                                 data: data2  //convertData1(data3) //data2 //每个点的值  ,地图中，每个市的值，有关地区的颜色
                             },
-                            {   //气泡
+                            /*{   //气泡
                                 name: '点',
                                 type: 'scatter',
                                 coordinateSystem: 'geo',
                                 symbol: 'pin', //气泡
-                                symbolSize: 30,
-                                //},
+                                symbolSize: 40,
                                 label: {
                                     normal: {
                                         show: true, //true //气泡上是否显示值
@@ -693,7 +631,7 @@
                                 },
                                 zlevel: 6,
                                 data: convertData1(data3), //显示每个点上的值
-                            },
+                            },*/
                         ]
                     };
                     myChart.setOption(option11);
@@ -702,78 +640,72 @@
             else{
                 // 需要给各个市统计每个市的前5个景点，并按照点进行显示
                 var data2 = [];
-                var data3 = [];
                 data = [];
-                var geoCoordMap1 = [];
                 myChart.setOption({series:[]},true);
-
                 console.log("地方："+name)  //四川
-                // /proJingdian  //根据ajax获取每个省的前十景点
-                var mapData = [];
-
                 $.get(mapCode, function(geoJson) {
                     var option11 ;
                     echarts.registerMap(name, geoJson);
                     var mapFeatures = echarts.getMap(name).geoJson.features;
-
                     var cities = [];
                     mapFeatures.forEach(function(v) {
                         // 地区名称
                         var name = v.properties.name;
                         cities.push(name)
-
                         console.log("地名："+name)
-
                         var s1 = Math.round(Math.random() * 100 + 10);
                         //各个地区的数量
                         data2.push({
-                            // 需要挨个处理各地区数据（不使用随机产生的数）：另外需要构造的数据是柱图数据
                             "name": name,
                             "value": s1, //地图上的每个地区的值
                         })
                     });
-                    //找到每个市的前5景点
+
+                    //每个城市总的美食个数
                     $.ajax({
-                        "url": "/cityJingdian",
+                        "url": "/MeishiCityNum",
+                        "data": {"cities": cities},
+                        "async": false,
+                        "type": "get",
+                        "dataType": "json",
+                        "success": function (rs) {
+                            if (rs != null) {
+
+                            }
+                        }
+                    })
+
+
+                    //查询每个地区前5的美食
+                    var data99 = [];
+                    $.ajax({
+                        "url": "/MeishiTopCity",
                         "data":{"cities":cities},
                         "async": false,
                         "type": "get",
                         "dataType": "json",
                         "success": function (rs) {
-                            alert("长度："+rs.length)
-                            for(var i=0;i<rs.length;i++){
-                                jingdian = rs[i].jingdian;
-                                lng = rs[i].lng;
-                                lat = rs[i].lat;
-                                jingdiannum = rs[i].num;
-
-                                //alert("景点："+jingdian+" 数量"+jingdiannum)
-                                mapData[jingdian] = [lng,lat];
-                                console.log("lng: "+lng+"  lat:"+lat)
-                                data3.push({
-                                    "name": jingdian,
-                                    "value": jingdiannum, //气泡提示的值
-                                })
+                            if (rs != null) {
+                                for (var key in rs) {
+                                    //console.log("键：" + key + ",值 ：{姓名："+ rs[key][0].meishi+"}");
+                                    var meishi = [];
+                                    var num = [];
+                                    for (var i = 0; i < rs[key].length; i++) {
+                                        //console.log("市："+key+"  美食："+rs[key][i].meishi+"  数量："+rs[key][i].num)
+                                        meishi.push(rs[key][i].meishi)
+                                        num.push(rs[key][i].num)
+                                    }
+                                    data99.push({
+                                        "province": key,
+                                        "meishi": meishi,
+                                        "num": num
+                                    })
+                                }
                             }
                         }
-                    });
+                    })
+                    console.log("***************省"+data99[0].province+"  美食："+data99[0].meishi[0]+"  数量："+data99[0].num[0]);
 
-                    // 变换地图数据（格式）：每个点上的值
-                    var convertData1 = function(data) {
-                        var res = [];
-                        for (var i = 0; i < data.length; i++) {
-                            var geoCoord = mapData[data[i].name]//geoCoordMap1[data[i].name];
-                            if (geoCoord) {
-                                res.push({
-                                    name: data[i].name, //景点名
-                                    value: geoCoord.concat(data[i].value) //景点值
-                                });
-                            }
-                        }
-                        return res;
-                    };
-
-                    /* 指定图表的配置项和数据:pie*/
                     option11 = {
                         title: {
                             text: name+"热门景点分布图",
@@ -785,12 +717,31 @@
                         },
                         tooltip: {
                             trigger: 'item',
+                            //position: 'top',//控制提示框的位置
+                            padding: 0,
+                            enterable: true,
+                            transitionDuration: 1,
+                            textStyle: {
+                                color: '#000',
+                                decoration: 'none',
+                            },
+                            position: function (point, params, dom, rect, size) {
+                                return [point[0], point[1]];
+                            },
                             formatter: function (params) {
-                                if(typeof(params.value)[2] == "undefined"){
-                                    return params.name + ' : ' + params.value;
-                                }else{
-                                    return params.name + ' : ' + params.value[2];
-                                }
+                                console.log("33"+params)
+                                var tipHtml = ''; //' + params.name + '
+                                tipHtml = '<div style="height:100px;width:200px;border-radius:5px;background:#fff;box-shadow:0 0 10px 5px #aaa">' +
+                                    '    <div style="height:50px;width:100%;border-radius:5px;background:#F8F9F9;border-bottom:1px solid #F0F0F0">' +
+                                    '        <span style="line-height:50px;margin-left:18px" id="city">' + params.name + '</span>' +
+                                    '        <span style="float:right;line-height:50px;margin-right:18px;color:#5396E3;cursor:pointer" onclick="mapTooltipClick();">点击查看详情</span>' +
+                                    '    </div>' +
+                                    '    <div id="tooltipBarId1" style="height:200px;width:100%;border-radius:0 0 5px 0;background:#fff"></div>' +
+                                    '</div>';
+                                setTimeout(function () {
+                                    tooltipCharts1(data99,params.name);
+                                }, 10);
+                                return tipHtml;
                             }
                         },
                         legend: {
@@ -870,37 +821,115 @@
                                 animation: false,
                                 data: data2  //convertData1(data3) //data2 //每个点的值  ,地图中，每个市的值，有关地区的颜色
                             },
-                            {   //气泡
-                                name: '点',
-                                type: 'scatter',
-                                coordinateSystem: 'geo',
-                                symbol: 'pin', //气泡
-                                symbolSize: 50,
-                                //},
-                                label: {
-                                    normal: {
-                                        show: true, //true //气泡上是否显示值
-                                        formatter: function(params) {
-                                            return params.data.value[2] //气泡上显示的值
-                                        },
-                                        textStyle: {
-                                            color: '#fff',
-                                            fontSize: 9,
-                                        }
-                                    }
-                                },
-                                itemStyle: {
-                                    normal: {
-                                        color: '#F62157', //标志颜色
-                                    }
-                                },
-                                zlevel: 6,
-                                data: convertData1(data3), //显示每个点上的值
-                            },
                         ]
                     };
                     myChart.setOption(option11);
                 });
+            }
+
+            function tooltipCharts(data99,name) {
+                //四川 美食：1,2,3,4,5 数量1,2,3,4,5
+                console.log("444"+name);
+                var data88 = [];
+                for(var i=0;i<data99.length;i++){
+                    if(data99[i].province == name){
+                        data88 = data99[i];
+                    }
+                }
+                console.log("市："+name+" 美食："+data88.meishi[0]+" 数量："+data88.num[0])
+                var myChart2 = echarts.init(document.getElementById('tooltipBarId'));
+                myChart2.clear();
+                var option = {
+                    tooltip: {},
+                    dataset: {
+                        source: [data88.meishi,data88.num]
+                    },
+                    xAxis: {
+                        type: 'category',
+                        interval: true,
+                        axisLabel: {
+                            rotate: 45
+                        },
+                        axisTick: {
+                            show: false
+                        }
+                    },
+                    yAxis: {},
+                    color: ['#4FA8F9', '#F5A623'],
+                    grid: {
+                        show: true,
+                        backgroundColor: '#FAFAFA',
+                        left: 30,
+                        right: 20,
+                        top: 20
+                    },
+                    series: [{
+                        type: 'bar',
+                        smooth: true,
+                        seriesLayoutBy: 'row',
+                        barWidth: 10
+                    }]
+
+                };
+                myChart2.setOption(option);
+                myChart2.on('click',function (param) {
+                    console.log("点击了:"+param.name);
+                    window.location.href = "/Meishi?meishi="+param.name;//跳转链接
+
+                })
+                
+            }
+
+            
+            function tooltipCharts1(data99,name) {
+                //四川 美食：1,2,3,4,5 数量1,2,3,4,5
+                console.log("444"+name);
+                var data888 = [];
+                for(var i=0;i<data99.length;i++){
+                    if(data99[i].province == name){
+                        data888 = data99[i];
+                    }
+                }
+                //console.log("市："+name+" 美食："+data888.meishi[0]+" 数量："+data888.num[0]);
+                var myChart1 = echarts.init(document.getElementById('tooltipBarId1'));
+                myChart1.clear();
+                var option = {
+                    tooltip: {},
+                    dataset: {
+                        source: [data888.meishi,data888.num]
+                    },
+                    xAxis: {
+                        type: 'category',
+                        interval: true,
+                        axisLabel: {
+                            rotate: 45
+                        },
+                        axisTick: {
+                            show: false
+                        }
+                    },
+                    yAxis: {},
+                    color: ['#4FA8F9', '#F5A623'],
+                    grid: {
+                        show: true,
+                        backgroundColor: '#FAFAFA',
+                        left: 30,
+                        right: 20,
+                        top: 20
+                    },
+                    series: [{
+                        type: 'bar',
+                        smooth: true,
+                        seriesLayoutBy: 'row',
+                        barWidth: 10
+                    }]
+                };
+                myChart1.setOption(option);
+                myChart1.on('click',function (param) {
+                    console.log("点击了:"+param.name);
+                    window.location.href = "/Meishi?meishi="+param.name;//跳转链接
+
+                })
             }
         }
     }
@@ -909,13 +938,10 @@
 </body>
 
 <script type="text/javascript">
-    /*function loadmap() {
-        map(0,"")
-    }*/
-    function timemap() {
+    /*function timemap() {
         setTimeout(map(0,""),500)
-    }
-    function map(month,city) {
+    }*/
+    /*function map(month,city) {
         // 百度地图API功能
         var opts = {
             width : 250,     // 信息窗口宽度
@@ -924,7 +950,7 @@
             enableMessage:true//设置允许信息窗发送短息
         };
         $.ajax({//获取每个季节最热门的景点
-            "url": "/JingdianTop", //JingdianTop //articleJing
+            "url": "/MeishiTop", //JingdianTop //articleJing
             "data":{"city":city,"month":month},
             "async": false,
             "type": "get",
@@ -934,7 +960,6 @@
                 //百度地图
                 var map = new BMap.Map("allmap");    // 创建Map实例
                 var point11 = new BMap.Point(arr[0].lng,arr[0].lat);
-                alert("中心点"+arr[0].lng+"..."+arr[0].lat)
 
                 map.centerAndZoom(point11,5); // 初始化地图,设置中心点坐标和地图级别
                 map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
@@ -952,10 +977,13 @@
                 if (null != data && "" != data) {
                     for(var i=0; i<arr.length;i++){
                         //将这些对象属性放到集合中
+                        var city11 = arr[i].city;
                         var lng = arr[i].lng;
                         var lat = arr[i].lat;
                         var num = arr[i].num;
-                        var jingdian1 = arr[i].jingdian;
+                        var jingdian1 = arr[i].meishi;
+                        var score = arr[i].score;
+                        var photo = arr[i].photos;
 
                         var point = new BMap.Point(lng,lat);
                         arr1.push(point);
@@ -963,7 +991,7 @@
                         var marker = new BMap.Marker(point);  // 创建标注
                         map.addOverlay(marker);
                         //city=""  month=0
-                        if(city == '' && i == 0){//肯定第一个是景点
+                        /!*if(city == '' && i == 0){//肯定第一个是景点
                             var content = "起点景点："+jingdian1+" 热度："+num+" 满意度："+10;
                             marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
                         }else if(city != '' && i == 0 ){//肯定是起点
@@ -971,16 +999,58 @@
                             marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
                         }else {
                             var content = "景点："+jingdian1+" 热度："+num+" 满意度："+10;
+                        }*!/
+                        if(photo != null){
+                            photos = photo.split(",")[0];
+                            if(city == '' && i == 0){//肯定第一个是景点
+                                //var content = "起点景点："+jingdian1+" 热度："+num+" 满意度："+score;
+                                var content =
+                                    "<div style='margin:0;line-height:20px;padding:2px;width: 300px;'>" +
+                                    "<h5 style='margin:0 0 5px 0;padding:0.2em 0'><a href='/Jingdian?jingdian="+jingdian1+"'>起点景点："+jingdian1+"</a></h5>" +
+                                    "<img src='"+photos+"' alt='' style='float:right;zoom:1;overflow:hidden;width:100px;height:100px;margin-left:3px;'/>" +
+                                    "城市："+city11+"<br/>热度："+num+"<br/>满意度："+score+
+                                    "</div>";
+                                marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+                            }else if(city != '' && i == 0 ){//肯定是起点
+                                // var content = "起点："+city;
+                                var content =
+                                    //"<div style='margin:0;line-height:20px;padding:2px;'>" +
+                                    "<h5 style='margin:0 0 5px 0;padding:0.2em 0'><a href='/Jingdian?jingdian="+jingdian1+"'>起点城市："+city+"</a></h5>"
+                                /!*"<img src='"+photos+"' alt='' style='float:right;zoom:1;overflow:hidden;width:100px;height:100px;margin-left:3px;'/>" +
+                                "城市："+city11+"<br/>热度："+num+"<br/>满意度："+score+
+                                "</div>";*!/
+                                marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+                            }else {
+                                //var content = "景点："+jingdian1+" 热度："+num+" 满意度："+score;
+                                var content =
+                                    "<div style='margin:0;line-height:20px;padding:2px;'>" +
+                                    "<h5 style='margin:0 0 5px 0;padding:0.2em 0'><a href='/Jingdian?jingdian="+jingdian1+"'>"+jingdian1+"</a></h5>" +
+                                    "<img src='"+photos+"' alt='' style='float:right;zoom:1;overflow:hidden;width:100px;height:100px;margin-left:3px;'/>" +
+                                    "城市："+city11+"<br/>热度："+num+"<br/>满意度："+score+
+                                    "</div>";
+                            }
+
+                            /!*var content =
+                                "<div style='margin:0;line-height:20px;padding:2px;'>" +
+                                "<h4 style='margin:0 0 5px 0;padding:0.2em 0'><a href='/Jingdian?jingdian="+jingdian1+"'>起点景点："+jingdian1+"</a></h4>" +
+                                "<img src='"+photos+"' alt='' style='float:right;zoom:1;overflow:hidden;width:100px;height:100px;margin-left:3px;'/>" +
+                                "城市："+city+"<br/>热度："+num+"<br/>满意度："+score+
+                                "</div>";*!/
+
+                            addClickHandler(content,marker,map);
+
+                        }else{
+                            var content = "美食："+jingdian1;
                         }
                         // 将标注添加到地图中
                         addClickHandler(content,marker,map);
                     }
 
-                    /*var curve = new BMapLib.CurveLine(arr1,
+                    /!*var curve = new BMapLib.CurveLine(arr1,
                         {strokeColor:"blue", strokeWeight:3, strokeOpacity:0.5}); //创建弧线对象
-                    map.addOverlay(curve); //添加到地图中*/
+                    map.addOverlay(curve); //添加到地图中*!/
 
-                    var polyline = new BMap.Polyline(arr1,
+                   /!* var polyline = new BMap.Polyline(arr1,
                         {   enableEditing: false,//是否启用线编辑，默认为false
                             enableClicking: true,//是否响应点击事件，默认为true
                             strokeColor:"#18a45b",//"red",//折线颜色
@@ -988,9 +1058,9 @@
                             strokeWeight:8,//折线宽度
                             strokeOpacity:0.8//折线透明度
                         });   //创建折线
-                    map.addOverlay(polyline);   //增加折线
+                    map.addOverlay(polyline);   //增加折线*!/
                 } else {
-                    alert("无景点")
+                    console.log("无景点")
                 }
             }
         });
@@ -1003,18 +1073,21 @@
         function openInfo(content,e,map){
             var p = e.target;
             var point = new BMap.Point(p.getPosition().lng, p.getPosition().lat);
-            var infoWindow = new BMap.InfoWindow(content,opts);  // 创建信息窗口对象
+            var infoWindow = new BMap.InfoWindow(content);  // 创建信息窗口对象 ,opts
             map.openInfoWindow(infoWindow,point); //开启信息窗口
         }
-    }
+    }*/
     
-    function chaxun() {
+   /* function chaxun() {
         var month1 = $("#month1").val();
         var city =  $("#city").val();
-        alert(month+","+city);
         map(month1,city);
-        CityTravelTop(month);
-        JingdianTop(month);
+    }*/
+
+    function SearchCity(city){
+        console.log("meishiMap  SearchCity："+city)
+        //根据城市汉字，跳转到该城市
+        window.location.href = "/TravelList?currPage=1&city="+city;
     }
     
 </script>

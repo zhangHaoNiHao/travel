@@ -31,36 +31,14 @@
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
     <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=dWE9mgZOhKTz7Bgkeg9VAGamm9GfKMW8"></script>
 
-    <style type="text/css">
-        .fixed{position:fixed;top:100px;right: 75px;}
-    </style>
+    <!--<style type="text/css">
+        .fixed{position:fixed;top:150px;right: 75px;}
+    </style>-->
 </head>
 
 <script th:inline="JavaScript">
     $(function () {
-        /*  登录验证
-        $.ajax({
-            "url": "/getUsername",
-            "async": false,
-            "type": "get",
-            "dataType": "json",
-            "success": function (data) {
-                if (null != data && "" != data) {
-                    document.getElementById("user").innerHTML = data.username;
-                } else {
-                    layer.alert('请先登录', {
-                        skin: 'layui-layer-molv' //样式类名
-                        , closeBtn: 0
-                    });
-                    setTimeout(function () {
-                        window.location.href = encodeURI("/login");
-                    },2000);
-                }
-            }
-        });
-        */
         var aaa = [[${travel }]];
-        alert(aaa);
         if (aaa != null && aaa.length > 0) {
             var content = "";
             $.each(aaa,function(i,item){
@@ -83,7 +61,6 @@
                 else if(i == 0) {
                     content+="<h2>"+item+"</h2>";
                 }else if("" == item ){
-                    // alert("空")
 
                 }else{
                     content+="<p>"+item+"</p>";
@@ -127,8 +104,7 @@
             <!-- 页头结束-->
 
             <div class="yj_content ctd_main_box cf">
-
-                <div class="ctd_main_left">
+                <div class="ctd_main_left span9">
                     <!-- 游记正文 -->
                     <div class="ctd_main_body">
                         <div class="ctd_content" ></div>
@@ -136,8 +112,39 @@
                 </div>
                 <!-- 右侧栏-->
                 <div class="ctd_side_right fixed">
-                    <div id="allmap" style="width: 350px;height: 350px;top:100px" ></div>
+                    <div class="portlet paddingless">
+                        <div class="portlet-title line">
+                            <div class="caption"><i class="icon-bell"></i>游记内容分析</div>
+                            <div class="tools">
+                                <a href="" class="expand"></a>
+                                <a href="#portlet-config" data-toggle="modal" class="config"></a>
+                                <a href="" class="reload"></a>
+                            </div>
+                        </div>
+                        <div class="portlet-body hide">
+                            <!--BEGIN TABS-->
+                            <div class="tabbable tabbable-custom">
+                                <ul class="nav nav-tabs">
+                                    <li class="active"><a href="#tab_1_1" data-toggle="tab">景点</a></li>
+                                    <li><a href="#tab_1_2" data-toggle="tab">美食</a></li>
+                                    <li><a href="#tab_1_3" data-toggle="tab">购物</a></li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div class="tab-pane active" id="tab_1_1"></div>
+                                    <div class="tab-pane" id="tab_1_2"></div>
+                                    <div class="tab-pane" id="tab_1_3"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br/>
+
+                    <div id="allmap" style="width: 300px;height: 300px;" ></div>
+
+                    <!--class="spn3"-->
+
                 </div>
+
                 <!-- 右侧栏-->
             </div>
         </div>
@@ -181,32 +188,19 @@
     </script>
 </body>
 </html>
-<!--<script type="text/javascript">
-    $(document).ready(function(){
-        var box = $(".ctd_side_right"); // #allmap  //.ctd_side_right
-        var boxTop = box.offset().top;	//元素到页面顶部的距离
-        $(document).scroll(function(){
-            var winScrollTop = $(window).scrollTop();	//获取窗口滚动的距离
-            console.log(winScrollTop);
-            if(winScrollTop > boxTop){
-                // box.addClass("fixed");
-            }else{
-                // box.removeClass("fixed");
-            }
-        });
-    });
-</script>-->
+
 <script type="text/javascript">
     $(function () {
         // 百度地图API功能
-        var opts = {
+        /*var opts = {
             width : 250,     // 信息窗口宽度
             height: 80,     // 信息窗口高度
             title : "信息窗口" , // 信息窗口标题
             enableMessage:true//设置允许信息窗发送短息
-        };
+        };*/
         var city = '[[${city}]]'; //城市
-        alert(city)
+
+        var jingdians = [];
         $.ajax({
             "url": "/articleJing",
             "data":{"city":city},
@@ -216,34 +210,63 @@
             "success": function (data) {
                 arr = data;
                 //百度地图
-                var map = new BMap.Map("allmap");    // 创建Map实例
+                var map = new BMap.Map("allmap",{enableMapClick:false});    // 创建Map实例
                 var point11 = new BMap.Point(arr[0].lng,arr[0].lat);
                 map.centerAndZoom(point11,11); // 初始化地图,设置中心点坐标和地图级别
                 map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+
                 //获取文章中的出现的景点，并找出他们的经纬度
                 var arr1 = new Array();
                 if (null != data && "" != data) {
-                    for(var i=0; i<arr.length;i++){
+                    for(var i=0; i<arr.length;i++) {
                         //将这些对象属性放到集合中
+                        var city11 = arr[i].city
                         var lng = arr[i].lng;
                         var lat = arr[i].lat;
                         var num = arr[i].num;
-                        alert("lng:"+lng+" lat:"+lat);
                         var jingdian1 = arr[i].jingdian;
-                        var point = new BMap.Point(lng,lat);
-                        arr1.push(point);
+                        var score = arr[i].score;
+                        var photo = arr[i].photo;
 
+                        var point = new BMap.Point(lng, lat);
+                        arr1.push(point);
                         var marker = new BMap.Marker(point);  // 创建标注
-                        var content = "景点："+jingdian1+" 热度："+num+" 满意度："+10;
-                        map.addOverlay(marker);               // 将标注添加到地图中
-                        addClickHandler(content,marker,map);
+                        map.addOverlay(marker);       // 将标注添加到地图中
+                        if (photo != null) {
+                            photos = photo.split(",")[0];
+                            if (i == 0) {//肯定第一个是景点
+                                //var content = "起点景点："+jingdian1+" 热度："+num+" 满意度："+score;
+                                var content =
+                                    "<div style='margin:0;line-height:20px;padding:2px;width: 300px;'>" +
+                                    "<h5 style='margin:0 0 5px 0;padding:0.2em 0'><a href='/Jingdian?jingdian=" + jingdian1 + "'>起点景点：" + jingdian1 + "</a></h5>" +
+                                    "<img src='" + photos + "' alt='' style='float:right;zoom:1;overflow:hidden;width:100px;height:100px;margin-left:3px;'/>" +
+                                    "城市：" + city11 + "<br/>热度：" + num + "<br/>满意度：" + score +
+                                    "</div>";
+                                //marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+                            } else {
+                                //var content = "景点："+jingdian1+" 热度："+num+" 满意度："+score;
+                                var content =
+                                    "<div style='margin:0;line-height:20px;padding:2px;'>" +
+                                    "<h5 style='margin:0 0 5px 0;padding:0.2em 0'><a href='/Jingdian?jingdian=" + jingdian1 + "'>" + jingdian1 + "</a></h5>" +
+                                    "<img src='" + photos + "' alt='' style='float:right;zoom:1;overflow:hidden;width:100px;height:100px;margin-left:3px;'/>" +
+                                    "城市：" + city11 + "<br/>热度：" + num + "<br/>满意度：" + score +
+                                    "</div>";
+                            }
+
+                            addClickHandler(content, marker, map);
+                        } else {
+
+                        }
                     }
 
                     var polyline = new BMap.Polyline(arr1,
-                        {strokeColor:"red", strokeWeight:4, strokeOpacity:3});   //创建折线
+                        {
+                            strokeColor:"red",
+                            strokeWeight:4,
+                            strokeOpacity:3});   //创建折线
                     map.addOverlay(polyline);   //增加折线
                 } else {
-                    alert("无景点")
+                    console.log("无景点")
                 }
             }
         });
@@ -256,8 +279,86 @@
         function openInfo(content,e,map){
             var p = e.target;
             var point = new BMap.Point(p.getPosition().lng, p.getPosition().lat);
-            var infoWindow = new BMap.InfoWindow(content,opts);  // 创建信息窗口对象
+            var infoWindow = new BMap.InfoWindow(content);  // 创建信息窗口对象
             map.openInfoWindow(infoWindow,point); //开启信息窗口
+            $("#imgDemo").onload=function () {
+                infoWindow.redraw();
+            }
         }
     })
+
+
+    $(function () {
+        var id = '[[${id}]]';
+        articleMeishiJingdianTechan(id);
+    })
+    //获得该片游记的所有景点，美食，特产
+    function articleMeishiJingdianTechan(id) {
+        $.ajax({
+            "url": "/articleMeishiJingdianTechan",
+            "data": {"id": id},
+            "async": false,
+            "type": "get",
+            "dataType": "json",
+            "success": function (data) { //TestBean
+                if (null != data ) {
+                    console.log("景点qq："+data.jingdians[0])
+                    jingdians = data.jingdians
+                    meishis = data.meishis;
+                    wupins = data.wupins;
+
+
+                    var jingdiancontent ="";
+                    if(jingdians != null && jingdians.length > 0){
+                        jingdiancontent += "<div class='scroller' data-height='290px' data-always-visible='1' data-rail-visible='0'>" +
+                            "<ul class='feeds'>"
+                        for(var i=0;i<jingdians.length;i++){
+                            jingdiancontent += "<li><a href='/TravelList?city1=beijing&currPage=1'><div class='col1'><div class='cont'><div class='cont-col1'><div class='label label-success'><i class='icon-bell'></i>"+
+                                "</div></div><div class='cont-col2'><div class='desc'>"+jingdians[i]+"</div></div></div></div><div class='col2'><div class='date'></div></div></a></li>";
+                        }
+                        //拼接html  cities //feeds
+                        jingdiancontent += "</ul></div>";
+                    }else{
+                        jingdiancontent += "该游记中没有景点"
+                    }
+                    $("#tab_1_1").html(jingdiancontent);
+                    //console.log("景点www："+jingdians[0])
+
+
+                    var meishicontent = "";
+                    if(meishis != null && meishis.length > 0) {
+                        meishicontent += "<div class='scroller' data-height='290px' data-always-visible='1' data-rail-visible='0'>" +
+                            "<ul class='feeds'>"
+                        for (var i = 0; i < meishis.length; i++) {
+                            meishicontent += "<li><a href='/TravelList?city1=beijing&currPage=1'><div class='col1'><div class='cont'><div class='cont-col1'><div class='label label-success'><i class='icon-bell'></i>" +
+                                "</div></div><div class='cont-col2'><div class='desc'>" + meishis[i] + "</div></div></div></div><div class='col2'><div class='date'></div></div></a></li>";
+                        }
+                        meishicontent += "</ul></div>";
+                    }else{
+                        meishicontent += "该游记中没有美食"
+                    }
+                    $("#tab_1_2").html(meishicontent);
+
+
+
+                    //拼接html  cities //feeds
+                    var wupincontent = "";
+                    if(wupins != null && wupins.length > 0) {
+                        wupincontent += "<div class='scroller' data-height='290px' data-always-visible='1' data-rail-visible='0'>" +
+                            "<ul class='feeds'>"
+                        for (var i = 0; i < wupins.length; i++) {
+                            wupincontent += "<li><a href='/TravelList?city1=beijing&currPage=1'><div class='col1'><div class='cont'><div class='cont-col1'><div class='label label-success'><i class='icon-bell'></i>" +
+                                "</div></div><div class='cont-col2'><div class='desc'>" + wupins[i] + "</div></div></div></div><div class='col2'><div class='date'></div></div></a></li>";
+                        }
+                        //拼接html  cities //feeds
+                        wupincontent += "</ul></div>";
+                    }else {
+                        wupincontent += "该游记中没有特产"
+                    }
+                    $("#tab_1_3").html(wupincontent);
+                }
+            }
+        })
+        
+    }
 </script>

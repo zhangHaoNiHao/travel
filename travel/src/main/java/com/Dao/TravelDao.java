@@ -2,13 +2,18 @@ package com.Dao;
 
 import com.Bean.JingdianNum;
 import com.Bean.ProvinceBean;
+import com.Bean.TestBean;
 import com.Bean.TravelBean1;
+import com.hankcs.hanlp.HanLP;
+import com.hankcs.hanlp.seg.Segment;
+import com.hankcs.hanlp.seg.common.Term;
 import com.utils.JDBCUtil;
 import com.utils.JDBCUtil1;
 import com.utils.RowMap;
 import org.junit.Test;
 import org.springframework.stereotype.Repository;
 
+import java.io.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -613,11 +618,10 @@ public class TravelDao {
             public JingdianNum rowMapping(ResultSet rs) throws SQLException {
                 JingdianNum jingdian = null;
                 //jingdian、lng、lat、num、
-                jingdian = new JingdianNum(rs.getString("jingdian"),rs.getString("lng"),rs.getString("lat"),rs.getInt("num"));
+                jingdian = new JingdianNum(rs.getString("jingdian"),rs.getString("lng"),rs.getString("lat"),rs.getInt("num"),rs.getString("score"));
                 return jingdian;
             }
         },pro1);
-        System.out.println("省："+pro);
         if(jingdians.size() > 0)
             return jingdians;
         else{
@@ -742,6 +746,12 @@ public class TravelDao {
      * 将汉字的城市名转化为拼音
      */
     public static String CityPinyin(String city) throws Exception {
+        System.out.println("TravelDao city"+city);
+        if(city.contains("市"))
+            city = city.replace("市","");
+        if(city.contains("县"))
+            city = city.replace("县","");
+
         city = city+"%";
         String sql = "select * from province where city like ?";
         List<String> list = JDBCUtil1.executeQuery(sql, new RowMap<String>() {
@@ -750,7 +760,10 @@ public class TravelDao {
                 return city1;
             }
         },city);
-        return list.get(0);
+        if(list.size()>0)
+            return list.get(0);
+        else
+            return null;
     }
     /**
      * 分页查询每个城市的游记
@@ -769,7 +782,12 @@ public class TravelDao {
                 return travel;  // rs.getString("content"),
             }
         },city,(currPage-1)*10);//
-        return travels;
+        if(travels.size() > 0){
+            return travels;
+        }else{
+            return null;
+        }
+
     }
     /**
      * 查询每个城市的游记数量
@@ -862,8 +880,31 @@ public class TravelDao {
                 return travel;
             }
         },city1);
-        return travels;
+        if(travels.size() > 0)
+            return travels;
+        else
+            return null;
     }
+
+    /**
+     * 根据城市名，查找出该城市的更新的游记信息
+     */
+    public static List<TravelBean1> cityTravelsUpdate(String city1) throws Exception {
+        String sql = "select * from travel where city=? and score is NULL";
+        List<TravelBean1> travels = JDBCUtil1.executeQuery(sql, new RowMap<TravelBean1>() {
+            public TravelBean1 rowMapping(ResultSet rs) throws SQLException {
+                TravelBean1 travel = new TravelBean1(rs.getInt("id"),rs.getString("title"),
+                        rs.getString("content"),rs.getString("city"),rs.getInt("month"),
+                        rs.getInt("day"),rs.getString("score"));
+                return travel;
+            }
+        },city1);
+        if(travels.size() > 0)
+            return travels;
+        else
+            return null;
+    }
+
 
     /**
      * 根据城市汉字 找到城市
@@ -881,6 +922,37 @@ public class TravelDao {
         return provinceBeans;
     }
 
+    //模糊查询城市的数量
+    public static Integer getCityByCityNum(String city) throws Exception {
+        city = "%"+city+"%";
+        String sql = "select count(*) num11 from province where city like ?";
+        List<Integer> nums = JDBCUtil1.executeQuery(sql, new RowMap<Integer>() {
+            public Integer rowMapping(ResultSet rs) throws SQLException {
+                Integer num = rs.getInt("num11");
+                return num;
+            }
+        },city);
+        return nums.get(0);
+    }
+
+    /**
+     * 根据城市汉字 模糊找到城市
+     * Map中的城市
+     * @return
+     */
+    public static ProvinceBean MoHuCity(String city) throws Exception {
+        city = city.substring(0,2);
+        city = city+"%";
+        String sql = "select * from province where city like ?";
+        List<ProvinceBean> provinceBeans = JDBCUtil1.executeQuery(sql, new RowMap<ProvinceBean>() {
+            public ProvinceBean rowMapping(ResultSet rs) throws SQLException {
+                ProvinceBean bean = new ProvinceBean(rs.getInt("id"),rs.getString("city"),rs.getString("city1"),rs.getInt("num"));
+                return bean;
+            }
+        },city);
+        return provinceBeans.get(0);
+    }
+
     /**
      * 根据城市拼音 找到城市汉字
      * @return
@@ -895,17 +967,7 @@ public class TravelDao {
         },city1);
         return provinceBeans.get(0).getCity();
     }
-    public static Integer getCityByCityNum(String city) throws Exception {
-        city = "%"+city+"%";
-        String sql = "select count(*) num11 from province where city like ?";
-        List<Integer> nums = JDBCUtil1.executeQuery(sql, new RowMap<Integer>() {
-            public Integer rowMapping(ResultSet rs) throws SQLException {
-                Integer num = rs.getInt("num11");
-                return num;
-            }
-        },city);
-        return nums.get(0);
-    }
+
 
     //获得所有的省
     public static List<String> getProvinces() throws Exception {
@@ -919,6 +981,131 @@ public class TravelDao {
         return provinces;
     }
 
+
+    /**
+     * 获得游记中的景点，美食，特产。
+     */
+    public static TestBean getJingdianMeishiJingdian(String content) throws Exception {
+        MeishiDao meishiDao = new MeishiDao();
+        WupinDao wupinDao = new WupinDao();
+        JingdianDao jingdianDao = new JingdianDao();
+        //删除所有的图片链接
+        content = content.replaceAll("http(s)?://[a-zA-Z0-9/#&\\.\\?=_-]+","").replaceAll("\n","");
+        //分词
+        Segment segment = HanLP.newSegment().enablePlaceRecognize(true);
+
+        //读取所有的景点
+        List<String> jingdians = jingdianDao.AllJingdianName();
+
+        //读取所有的美食
+        File meishiFile = new File("D:/data/ciku/meishi.txt");
+        FileInputStream input1 = new FileInputStream(meishiFile);
+        BufferedReader reader1=new BufferedReader(new InputStreamReader(input1,"utf-8"));
+        List<String> meishis = new ArrayList<>();
+        String meishi  = reader1.readLine();
+        while(meishi != null){
+            meishis.add(meishi);
+            meishi = reader1.readLine();
+        }
+        reader1.close();
+
+        //读取所有的特产
+        File wupinFile = new File("D:/data/ciku/wupin.txt");
+        FileInputStream input2 = new FileInputStream(wupinFile);
+        BufferedReader reader2=new BufferedReader(new InputStreamReader(input2,"utf-8"));
+        List<String> wupins = new ArrayList<>();
+        String wupin  = reader2.readLine();
+        while(wupin != null){
+            wupins.add(wupin);
+            wupin = reader2.readLine();
+        }
+        reader2.close();
+
+        List<String> jingdianList = new ArrayList<>();
+        List<String> meishiList = new ArrayList<>();
+        List<String> wupinList = new ArrayList<>();
+
+        List<Term> termList = segment.seg(content);
+        for (int i = 0; i < termList.size(); i++) {
+            String word = termList.get(i).word.toString();
+
+            if(jingdians.contains(word)){
+                //System.out.println("景点："+word);
+                if(!jingdianList.contains(word))
+                    jingdianList.add(word);
+            }
+            if(meishis.contains(word)){
+                //System.out.println("美食："+word);
+                if(!meishiList.contains(word))
+                    meishiList.add(word);
+            }
+            if(wupins.contains(word)){
+                //System.out.println("特产："+word);
+                if(!wupinList.contains(word))
+                    wupinList.add(word);
+            }
+
+        }
+        TestBean testBean = new TestBean(jingdianList,meishiList,wupinList);
+        return testBean;
+    }
+
+    /**
+     * 根据城市拼音，修改城市游记数量
+     */
+    public static boolean updateCityNum(String city1,String score,int month){
+        String sql = "";
+        if(Double.parseDouble(score)> 0.75){
+            if(month>=3 && month <=5)
+                sql = "update province set haonum1=haonum1+1";
+            else if(month>=6 && month<=8){
+                sql = "update province set haonum2=haonum2+1";
+            }else if(month>=9 && month<=11){
+                sql = "update province set haonum3=haonum3+1";
+            }else if(month==12 || month <=2){
+                sql = "update province set haonum4=haonum4+1";
+            }
+        }else if(Double.parseDouble(score) >= 0.6){
+            if(month>=3 && month <=5)
+                sql = "update province set normalnum1=normalnum1+1";
+            else if(month>=6 && month<=8){
+                sql = "update province set normalnum2=normalnum2+1";
+            }else if(month>=9 && month<=11){
+                sql = "update province set normalnum3=normalnum3+1";
+            }else if(month==12 || month <=2){
+                sql = "update province set normalnum4=normalnum4+1";
+            }
+        }else if(Double.parseDouble(score) < 0.6){
+            if(month>=3 && month <=5)
+                sql = "update province set badnum1=badnum1+1";
+            else if(month>=6 && month<=8){
+                sql = "update province set badnum2=badnum2+1";
+            }else if(month>=9 && month<=11){
+                sql = "update province set badnum3=badnum3+1";
+            }else if(month==12 || month <=2){
+                sql = "update province set badnum4=badnum4+1";
+            }
+        }
+
+        int a = 0;
+        a = JDBCUtil1.executeUpdate(sql,null);
+        if(a>0){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+
+    public static boolean deleteTravel(int id){
+        String sql = "delete from travel where id=?";
+        int a = 0;
+        a = JDBCUtil1.executeUpdate(sql,id);
+        if(a>0)
+            return true;
+        else
+            return false;
+    }
 
 
 }

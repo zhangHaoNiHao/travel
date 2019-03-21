@@ -36,30 +36,6 @@
 <!-- END HEAD -->
 <!-- BEGIN BODY -->
 <script>
-    /*
-    $(function () {
-        $.ajax({
-            "url": "/getUsername",
-            "async": false,
-            "type": "get",
-            "dataType": "json",
-            "success": function (data) {
-                if (null != data && "" != data) {
-                    document.getElementById("user").innerHTML = data.username;
-                } else {
-                    layer.alert('请先登录', {
-                        skin: 'layui-layer-molv' //样式类名
-                        , closeBtn: 0
-                    });
-                    setTimeout(function () {
-                        window.location.href = encodeURI("/login");
-                    },3000);
-                }
-            }
-        });
-
-    })
-    */
 
     //获得所有的美食
     function MeishiAll(city1,currPage) {
@@ -72,7 +48,6 @@
             "dataType": "json",
             "success": function (data) {
                 if(data != null ){
-					alert("MeishiCityAll长度："+data.list.length)
                     var content = "";
                     for(var i=0;i<data.list.length;i++){
                         content += "<tr><td>"+data.list[i].id+"</td><td><a href='/getMeishiByid?id="+data.list[i].id+"&currPage=1'>"+data.list[i].meishi+"</a></td><td>"+data.list[i].city1+"</td><td>"+data.list[i].num+"</td></tr>"
@@ -81,7 +56,6 @@
 
                     //寻找第二页的该城市的所有景点
 					count = data.totalCount;
-					alert("JingdianCityAll 总数量"+count)
                     var onPagechange = function(page){
                         console.log('当前点击页码',page);
                         MeishiAll(city1,page);
@@ -105,7 +79,15 @@
 		var city1 = '[[${city1}]]';
 		var currPage = '[[${currPage}]]';
 		//找所有的景点
-		MeishiAll(city1,currPage);
+		if(city1 != ''){
+            MeishiAll(city1,currPage);
+		}
+
+
+		var meishi = '[[${meishi}]]'
+		if(meishi != ''){
+            MeishiSearch(meishi,1);
+		}
     })
 
 	function MeishiSearch(meishi,currPage) {
@@ -117,7 +99,6 @@
             "dataType": "json",
             "success": function (data) {
                 if(data != null ){
-                    alert("JingdianSearch 长度："+data.list.length)
                     var content = "";
                     for(var i=0;i<data.list.length;i++){
                         content += "<tr><td>"+data.list[i].id+"</td><td><a href='/getMeishiByid?id="+data.list[i].id+"&currPage=1'>"+data.list[i].meishi+"</a></td><td>"+data.list[i].city1+"</td><td>"+data.list[i].num+"</td></tr>"
@@ -126,7 +107,6 @@
 
                     //寻找第二页的该城市的所有景点
                     count = data.totalCount;
-                    alert("JingdianSearch总数量"+count)
                     var onPagechange = function(page){
                         MeishiSearch(meishi,page);
                     }

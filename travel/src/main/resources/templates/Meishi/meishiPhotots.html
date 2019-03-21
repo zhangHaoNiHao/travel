@@ -36,39 +36,13 @@
 <!-- END HEAD -->
 <!-- BEGIN BODY -->
 <script>
-    /*
-    $(function () {
-        $.ajax({
-            "url": "/getUsername",
-            "async": false,
-            "type": "get",
-            "dataType": "json",
-            "success": function (data) {
-                if (null != data && "" != data) {
-                    document.getElementById("user").innerHTML = data.username;
-                } else {
-                    layer.alert('请先登录', {
-                        skin: 'layui-layer-molv' //样式类名
-                        , closeBtn: 0
-                    });
-                    setTimeout(function () {
-                        window.location.href = encodeURI("/login");
-                    },3000);
-                }
-            }
-        });
-
-    })
-    */
     $(function () {
 		//获取对象，将图片追加到元素中
 		var meishi = '[[${meishi.meishi}]]'; //景点
-		//alert("美食："+jingdian)
 		var title = meishi+" 图片";
         $("#title1").append(title)
 
 		var photo11 = '[[${photos}]]';
-		alert(photo11);
 		if(photo11 != null){
             var content = "";
 		    var photos = [];

@@ -16,7 +16,7 @@ public class TravelUtil {
     public static void main(String[] args) throws Exception {
         QingganScore();
     }
-
+    //修改游记评分
     public static void QingganScore() throws Exception{
         TravelDao traveldao = new TravelDao();
         List<TravelBean1> travels = traveldao.TravelList();
@@ -30,7 +30,7 @@ public class TravelUtil {
 
         }
     }
-
+    //情感分析
     public static double articleQinggan(String content) throws Exception{
         //将所有的链接删除
         String content1 = content.replaceAll("http(s)?://[a-zA-Z0-9/#&\\.\\?=_-]+", "");

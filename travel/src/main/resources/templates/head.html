@@ -1,7 +1,5 @@
 <div class="navbar-inner" >
-
     <div class="container-fluid">
-
         <!-- LOGO -->
         <a class="brand" href="index"><img src="../media/image/logo.png" alt="logo"/></a>
 
@@ -19,14 +17,26 @@
                 </a>
                 <!-- 点击用户头像弹出的菜单 -->
                 <ul class="dropdown-menu">
-                    <li><a href="extra_profile.html"><i class="icon-user"></i> My Profile</a></li>
-                    <li><a href="page_calendar.html"><i class="icon-calendar"></i> My Calendar</a></li>
-                    <li><a href="inbox.html"><i class="icon-envelope"></i> My Inbox(3)</a></li>
-                    <li><a href="#"><i class="icon-tasks"></i> My Tasks</a></li>
+                    <li><a href="/UserInfo"><i class="icon-user"></i> 用户信息</a></li>
                     <li class="divider"></li><!-- 分隔线 -->
-                    <li><a href="login.jsp"><i class="icon-key"></i> 注 销</a></li>
+                    <li><a href="/login"><i class="icon-key"></i> 注 销</a></li>
                 </ul>
             </li>
         </ul>
     </div>
 </div>
+<script>
+    $(function () {
+        var user = '[[${session.user}]]'
+        if(user == '' ){
+            layer.alert('请先登录', {
+                skin: 'layui-layer-molv' //样式类名
+                , closeBtn: 0
+            });
+            setTimeout(function () {
+                window.location.href = encodeURI("/login");
+            },3000);
+        }
+    })
+
+</script>

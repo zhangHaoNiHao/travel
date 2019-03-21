@@ -1,11 +1,9 @@
 package com.Controller;
 
-import com.Bean.JingdianNum;
-import com.Bean.PageBean;
-import com.Bean.ProvinceBean;
-import com.Bean.TravelBean1;
+import com.Bean.*;
 import com.Dao.TravelDao;
 import org.json.JSONObject;
+import org.junit.Test;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,12 +31,9 @@ public class TravelController {
     public List<ProvinceBean> provinceNum(Model model) throws Exception {
         TravelDao dao = new TravelDao();
         List<ProvinceBean> provinceBeans = dao.provinceNum();
+        System.out.println("/provinceNum:"+provinceBeans.get(0).getHaonum1());
         return provinceBeans;
     }
-
-
-
-
 
     //统计每个省景点热度前十的景点，查询出来
     @RequestMapping(value="/proJingdian")
@@ -89,29 +84,51 @@ public class TravelController {
      * 分页查询每个城市的游记
      */
     @RequestMapping(value="/TravelList")
-    public String CityTravel(int currPage,String city1, Model model) throws Exception {
+    public String CityTravel(int currPage,String city1, String city,Model model) throws Exception {
         TravelDao dao = new TravelDao();
         List<TravelBean1> travels = null;
         int num = 0;
-        //查询该城市的第一页的游记
-        if(city1.equals("all")){
-            travels = dao.TravelAllList(currPage);
-            num = dao.TravelAllNum();
-        }else {
-            travels = dao.TravelList(currPage,city1);
-            //查询该城市的游记数量
-             num = dao.cityNum(city1);
+
+        //拼音
+        if(city1.matches("[a-zA-Z]+")){
+            //查询该城市的第一页的游记
+            if(city1.equals("all")){
+                travels = dao.TravelAllList(currPage);
+                num = dao.TravelAllNum();
+            }else {
+                travels = dao.TravelList(currPage,city1);
+                //查询该城市的游记数量
+                num = dao.cityNum(city1);
+            }
+        }else{//汉字
+            //将汉字转化为拼音
+            city1 = dao.CityPinyin(city1);
+            if(city1 != null){
+                travels = dao.TravelList(currPage,city1);
+            } else{
+                System.out.println("汉字转拼音失败");
+            }
         }
+
         PageBean<TravelBean1> bean = new PageBean<>(travels,currPage,10,num);
         //根据城市拼音，找到城市
-        String city = dao.getCity1ByCity(city1);
+        String hancity = dao.getCity1ByCity(city1);
         model.addAttribute("pageBean",bean);
         model.addAttribute("city1",city1);
-        model.addAttribute("city",city);
+        model.addAttribute("city",hancity);
         System.out.println("TravelController 城市："+city1+"  汉字"+city);
         return "travel/travelcity";
     }
 
+    @Test
+    public void test(){
+        String str1 = "北京";
+        String str2 = "beijing";
+        System.out.println(str2.matches("[a-zA-Z]+"));
+        System.out.println(str1.matches("[\\u4e00-\\u9fa5]+"));
+        System.out.println(str1.matches("[a-zA-Z]+"));
+        System.out.println(str2.matches("[\\u4e00-\\u9fa5]+"));
+    }
     /**
      * 分页查询所有的游记
      */
@@ -179,4 +196,22 @@ public class TravelController {
         List<ProvinceBean> provinceBeans = dao.allCityDetail();
         return provinceBeans;
     }
+
+    /**
+     * 找到该游记中的所有景点、美食、特产
+     * @return
+     */
+    @RequestMapping(value="/articleMeishiJingdianTechan")
+    @ResponseBody//返回json格式数据
+    public TestBean articleMeishiJingdianTechan(int id) throws Exception {
+        TravelDao dao = new TravelDao();
+        TravelBean1 travelBean1 = dao.searchTravel(id);
+        System.out.println("游记id"+id);
+        TestBean testBean = dao.getJingdianMeishiJingdian(travelBean1.getContent());
+        System.out.println("景点s长度:"+testBean.getJingdians().size()+"  "+testBean.getJingdians().toString());
+        System.out.println("美食s长度:"+testBean.getMeishis().size()+"  "+testBean.getMeishis().toString());
+        System.out.println("物品s长度:"+testBean.getWupins().size()+"  "+testBean.getWupins().toString());
+        return testBean;
+    }
+
 }

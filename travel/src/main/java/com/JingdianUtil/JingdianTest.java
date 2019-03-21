@@ -1,9 +1,7 @@
 package com.JingdianUtil;
 
-import com.Bean.JingdianNum;
-import com.Bean.JingdianTravelId;
-import com.Bean.ProvinceBean;
-import com.Bean.TravelBean1;
+import com.Bean.*;
+import com.Dao.JingdianContentDao;
 import com.Dao.JingdianDao;
 import com.Dao.TravelDao;
 import com.alibaba.fastjson.JSON;
@@ -34,6 +32,7 @@ import static com.Dao.JingdianDao.AllJingdianNum;
 public class JingdianTest {
 
     /*
+    *
     // 现将所有的景点转换成百度地图的景点，然后再对游记分词，找到地点，转成百度地图，再进行对比
     public static void main(String[] args) throws Exception {
         //读取所有的景点
@@ -694,27 +693,6 @@ public class JingdianTest {
         }
     }
 
-
-    @Test
-    public void test1() throws Exception {
-        /*String url = "https://dimg08.c-ctrip.com/images/100u0z000000n3nblAA9D_R_1024_10000_Q90.jpg?sddss=sdsd";
-        if(url.contains("http(s)?://[a-zA-Z0-9/#\\.\\?=_-]+\\.jpg")){//http(s)?://[a-zA-Z0-9/#\.\?=_-]+\.jpg  //http(s)?://[a-zA-Z0-9/#\.\?=_-]+\.jpg
-            System.out.println("匹配");
-        }else if(url.matches("http(s)?://[a-zA-Z0-9/#\\.\\?=_-]+\\.jpg[a-zA-Z0-9\\?=]{0,30}")){
-            System.out.println("mathc");
-        }*/
-
-        /*
-        String str = "sss|xxx|xxx||cccc|vvvv||||bbbb";
-        String str2 = str.replaceAll("[||]+","|");
-        System.out.println(str2);
-        */
-        JingdianDao dao = new JingdianDao();
-        JingdianNum jingdian = dao.GetJingdainNumById(3);
-
-        System.out.println(jingdian.getPhoto3().replaceAll("null",""));
-    }
-
     /**
      * 找到hashmap中最多的景点
      */
@@ -771,31 +749,6 @@ public class JingdianTest {
 
     }
 
-    @Test
-    public void test2() throws Exception {
-        /*
-        List<String> str = new ArrayList<>();
-        str.add("zhang");
-        str.add("hao");
-        str.add("ni");
-        str.add("hao");
-        for(int i=0;i<5;i++){
-            File wupinnumfile = new File("D:/data/travelnum/test.txt");
-            OutputStreamWriter write4 = new OutputStreamWriter(new FileOutputStream(wupinnumfile,true), "UTF-8");
-            BufferedWriter bw4 = new BufferedWriter(write4);
-            String content = "";
-            for(String l : str){
-                content += l+"%";
-            }
-            bw4.write(content+"\n");
-            bw4.flush();
-        }*/
-        String t = "beijing,1107,";
-        for(String l : t.split(","))
-            System.out.println("1::"+l);
-
-
-    }
     @Test
     public void TongjiNumMeishi() throws Exception {
         //城市、游记id、美食。。。、
@@ -898,6 +851,7 @@ public class JingdianTest {
         }
 
     }
+    //保存特产出现的游记id
     public static boolean insertWupin(String wupin,String city1,String travelids){
         String sql = "insert into wupintravelid(wupin,city1,travelids) values(?,?,?)";
         int a = JDBCUtil1.executeUpdate(sql, wupin, city1, travelids);
@@ -907,6 +861,175 @@ public class JingdianTest {
         return f;
     }
 
+
+
+    //////////////////////////////////////////////////////////////////////////////
+    /** 统计景点、美食、特产出现的游记
+     * 找到每个城市的游记
+     * 找到每个城市中提到的景点，物品，美食，提取出来，记录个数，和游记的id
+     */
+    @Test
+    public void TravelId() throws Exception {
+        //获得所有的城市拼音
+        TravelDao dao = new TravelDao();
+        JingdianDao jingdianDao = new JingdianDao();
+        //分词
+        Segment segment = HanLP.newSegment().enablePlaceRecognize(true);
+        //所有的市
+        List<ProvinceBean> city1list = dao.allCity();
+        //System.out.println(dao.cityTravels(city1list.get(0).getCity1()).get(0).getContent().replaceAll("[\n\n]+","\n"));
+        List<String> jingdians = jingdianDao.AllJingdianName();
+        //读取美食
+        List<String> meishis = new ArrayList<>();
+        FileInputStream input1 = new FileInputStream(new File("D:/data/ciku/meishi.txt"));
+        BufferedReader reader1 = new BufferedReader(new InputStreamReader(input1, "utf-8"));
+        String meishi = reader1.readLine();
+        while (meishi != null) {
+            meishis.add(meishi);
+            meishi = reader1.readLine();
+        }
+        reader1.close();
+
+        //读取物品文件
+        List<String> wupins = new ArrayList<>();
+        FileInputStream input = new FileInputStream(new File("D:/data/ciku/wupin.txt"));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(input, "utf-8"));
+        String wupin = reader.readLine();
+        while (wupin != null) {
+            wupins.add(wupin);
+            wupin = reader.readLine();
+        }
+        reader.close();
+
+
+        for(ProvinceBean bean : city1list) {
+            //查询每个城市的游记
+            String city1 = bean.getCity1();
+            List<TravelBean1> travelBean1s = dao.cityTravels(city1);
+
+            //每个城市的食物的数量
+            HashMap<String,Integer> meishinum = new HashMap<String,Integer>();
+            //每个城市物品的数量
+            HashMap<String,Integer> wupinnum = new HashMap<String,Integer>();
+
+            for(TravelBean1 travel : travelBean1s){
+                //记录该游记的景点
+                List<String> jingdian1 = new ArrayList<>();
+                //记录该游记的美食
+                List<String> meishi1 = new ArrayList<>();
+                //记录游记中的物品
+                List<String> wupin1 = new ArrayList<>();
+                //在景点中记录游记中的景点,、物品数量、美食数量 对应的id
+
+                String content = travel.getContent().replaceAll("[\n\n]+","\n");
+                int month = travel.getMonth();
+                int id = travel.getId();
+                String[] lines = content.split("\n");
+                for(int i=1;i<lines.length;i++){
+                    if(!lines[i].matches("http(s)?://[a-zA-Z0-9/#\\.\\?=_-]+")){
+                        List<Term> termList = segment.seg(lines[i]);
+                        for(int j=0;j<termList.size();j++)
+                        {
+                            String word = termList.get(j).word.toString();
+                            if(jingdians.contains(word)){//提取该游记中所有的景点
+                                if(!jingdian1.contains(word)){
+                                    jingdian1.add(word);
+                                }
+                            }
+                            if(meishis.contains(word)){
+                                if(!meishi1.contains(word)){
+                                    meishi1.add(word);
+                                }
+                                //统计美食的个数
+                                if(meishinum.get(word) == null){
+                                    meishinum.put(word,1);
+                                }else{
+                                    meishinum.put(word,meishinum.get(word)+1);
+                                }
+                            }
+                            if(wupins.contains(word)){
+                                if(!wupin1.contains(word)){
+                                    wupin1.add(word);
+                                }
+                                //统计物品的个数
+                                if(wupinnum.get(word) == null){
+                                    wupinnum.put(word,1);
+                                }else{
+                                    wupinnum.put(word,wupinnum.get(word)+1);
+                                }
+                            }
+                            //物品 travelId city
+                        }
+                    }
+                }
+                System.out.println("美食："+meishi1.toString());
+                System.out.println("景点："+jingdian1.toString());
+                System.out.println("物品："+wupin1.toString());
+                //将每篇游记的信息存到文件
+                File jingdianfile = new File("D:/data/travelnum/jingdian_id.txt");
+                OutputStreamWriter write = new OutputStreamWriter(new FileOutputStream(jingdianfile,true), "UTF-8");
+                BufferedWriter bw = new BufferedWriter(write);
+                String jingdianll = city1+","+id+",";
+                for(String j : jingdian1){
+                    jingdianll += j+"|";
+                }
+                bw.write(jingdianll + "\n");
+                bw.flush();
+                bw.close();
+
+                File meishifile = new File("D:/data/travelnum/meishi_id.txt");
+                OutputStreamWriter write1 = new OutputStreamWriter(new FileOutputStream(meishifile,true), "UTF-8");
+                BufferedWriter bw1 = new BufferedWriter(write1);
+                String meishill = city1+","+id+",";
+                for(String j : meishi1){
+                    meishill += j+"|";
+                }
+                bw1.write(meishill + "\n");
+                bw1.flush();
+                bw1.close();
+
+                File wupinfile = new File("D:/data/travelnum/wupin_id.txt");
+                OutputStreamWriter write2 = new OutputStreamWriter(new FileOutputStream(wupinfile,true), "UTF-8");
+                BufferedWriter bw2 = new BufferedWriter(write2);
+                String wupinll = city1+","+id+",";
+                for(String j : wupin1){
+                    wupinll += j+"|";
+                }
+                bw2.write(wupinll + "\n");
+                bw2.flush();
+                bw2.close();
+            }//一篇游记完
+            System.out.println("city1"+city1);
+            //将每个城市的美食、物品的数量，
+            File meishinumfile = new File("D:/data/travelnum/meishi_num.txt");
+            OutputStreamWriter write3 = new OutputStreamWriter(new FileOutputStream(meishinumfile,true), "UTF-8");
+            BufferedWriter bw3 = new BufferedWriter(write3);
+            for (Map.Entry<String, Integer> entry : meishinum.entrySet()) {
+                Integer value = entry.getValue();
+                String key = entry.getKey();
+                System.out.println("美食数量："+city1+","+key+","+value);
+                bw3.write(city1+","+key+","+value+"\n");
+                bw3.flush();
+            }
+
+            bw3.close();
+
+            //将每个城市的美食、物品的数量，
+            File wupinnumfile = new File("D:/data/travelnum/wupin_num.txt");
+            OutputStreamWriter write4 = new OutputStreamWriter(new FileOutputStream(wupinnumfile,true), "UTF-8");
+            BufferedWriter bw4 = new BufferedWriter(write4);
+            for (Map.Entry<String, Integer> entry : wupinnum.entrySet()) {
+                Integer value = entry.getValue();
+                String key = entry.getKey();
+                System.out.println("物品数量："+city1+","+key+","+value);
+                bw4.write(city1+","+key+","+value+"\n");
+                bw4.flush();
+            }
+
+            bw4.close();
+
+        }
+    }
     /**
      * 统计每篇游记的景点,可以根据景点查询出关于该景点的所有的游记id
      */
@@ -972,7 +1095,7 @@ public class JingdianTest {
         //通过物品，找到对应的游记和内容
 
     }
-    //数据库保存
+    //景点数据库保存
     public static boolean insertJingdian(String jingdian,String city1,String travelids){
         String sql = "insert into jingdiantravelid(jingdian,city1,travelids) values(?,?,?)";
         int a = JDBCUtil1.executeUpdate(sql, jingdian, city1, travelids);
@@ -981,6 +1104,9 @@ public class JingdianTest {
             f = true;
         return f;
     }
+
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     @Test
     public void test11() throws Exception {
@@ -1181,6 +1307,23 @@ public class JingdianTest {
                 }
 
             }
+        }
+    }
+
+
+    /**
+     * 统计每个景点的平均分，修改jingdiannum1表中的值
+     */
+    @Test
+    public void UpdateJingdianScore() throws Exception {
+        //查询jingdianContent表中的所有景点，按照景点和城市分组，求平均值
+        JingdianContentDao dao = new JingdianContentDao();
+        JingdianDao jingdianDao = new JingdianDao();
+        List<JingdianContentBean> jingdianContentBeans = dao.JingdianContentScore();
+
+        //根据景点和城市，找到jingdiannum1中对应的景点，将平均值修改
+        for(JingdianContentBean jingdian : jingdianContentBeans){
+            System.out.println(jingdianDao.UpdateJingdianScore(jingdian));
         }
     }
 

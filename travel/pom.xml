@@ -89,6 +89,17 @@
 		</dependency>
 
 		<!--Webmagic 爬取数据-->
+		<!-- https://mvnrepository.com/artifact/us.codecraft/webmagic-core -->
+		<!--<dependency>
+			<groupId>us.codecraft</groupId>
+			<artifactId>webmagic-core</artifactId>
+			<version>0.7.2</version>
+		</dependency>
+		<dependency>
+			<groupId>us.codecraft</groupId>
+			<artifactId>webmagic-extension</artifactId>
+			<version>0.7.2</version>
+		</dependency>-->
 		<dependency>
 			<groupId>us.codecraft</groupId>
 			<artifactId>webmagic-core</artifactId>
@@ -100,11 +111,11 @@
 			<version>0.7.3</version>
 		</dependency>
 
-		<dependency>
+		<!--<dependency>
 			<groupId>com.github.pagehelper</groupId>
 			<artifactId>pagehelper</artifactId>
 			<version>4.0.0</version>
-		</dependency>
+		</dependency>-->
 
 
 		<dependency>
@@ -125,8 +136,6 @@
 			<artifactId>java-sdk</artifactId>
 			<version>4.8.0</version>
 		</dependency>
-
-
 
 	</dependencies>
 

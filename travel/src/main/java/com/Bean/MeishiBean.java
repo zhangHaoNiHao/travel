@@ -6,9 +6,53 @@ public class MeishiBean {
     private String meishi;
     private String city1;
     private String city;
+    private String province;
     private int num;
     private String travelids;
     private String photos;
+
+    private String lng;
+    private String lat;
+    private boolean visit;
+
+    public MeishiBean(String city, String lng, String lat, boolean visit) {
+        this.city = city;
+        this.lng = lng;
+        this.lat = lat;
+        this.visit = visit;
+    }
+
+    public boolean isVisit() {
+        return visit;
+    }
+
+    public void setVisit(boolean visit) {
+        this.visit = visit;
+    }
+
+    public String getLng() {
+        return lng;
+    }
+
+    public void setLng(String lng) {
+        this.lng = lng;
+    }
+
+    public String getLat() {
+        return lat;
+    }
+
+    public void setLat(String lat) {
+        this.lat = lat;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
 
     public String getPhotos() {
         return photos;
@@ -66,32 +110,61 @@ public class MeishiBean {
         this.travelids = travelids;
     }
 
-    public MeishiBean(int id, String meishi, String city1, String city, int num) {
+    /*public MeishiBean(int id, String meishi, String city1, String city, int num) {
         this.id = id;
         this.meishi = meishi;
         this.city1 = city1;
         this.city = city;
         this.num = num;
-    }
+    }*/
     public MeishiBean(int id, String meishi, String city1, int num, String photos) {
         this.id = id;
         this.meishi = meishi;
         this.city1 = city1;
-        this.city = city;
         this.num = num;
         this.photos = photos;
     }
+    public MeishiBean(int id, String meishi, String city1, int num, String photos,boolean visit) {
+        this.id = id;
+        this.meishi = meishi;
+        this.city1 = city1;
+        this.num = num;
+        this.photos = photos;
+        this.visit = visit;
+    }
+
     public MeishiBean(int id, String meishi, String city1, int num) {
         this.id = id;
         this.meishi = meishi;
         this.city1 = city1;
         this.num = num;
     }
+    public MeishiBean(int id, String meishi, String city1, String province,int num) {
+        this.id = id;
+        this.meishi = meishi;
+        this.city1 = city1;
+        this.num = num;
+        this.province = province;
+    }
+
+    public MeishiBean(int id, String meishi, String city1,String city, String province,int num) {
+        this.id = id;
+        this.meishi = meishi;
+        this.city1 = city1;
+        this.city = city;
+        this.num = num;
+        this.province = province;
+    }
+
 
     public MeishiBean(int id, String meishi, String city1, String travelids) {
         this.id = id;
         this.meishi = meishi;
         this.city1 = city1;
         this.travelids = travelids;
+    }
+
+    public MeishiBean(String city1) {
+        this.city1 = city1;
     }
 }

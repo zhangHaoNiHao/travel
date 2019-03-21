@@ -36,30 +36,7 @@
 <!-- END HEAD -->
 <!-- BEGIN BODY -->
 <script>
-    /*
-    $(function () {
-        $.ajax({
-            "url": "/getUsername",
-            "async": false,
-            "type": "get",
-            "dataType": "json",
-            "success": function (data) {
-                if (null != data && "" != data) {
-                    document.getElementById("user").innerHTML = data.username;
-                } else {
-                    layer.alert('请先登录', {
-                        skin: 'layui-layer-molv' //样式类名
-                        , closeBtn: 0
-                    });
-                    setTimeout(function () {
-                        window.location.href = encodeURI("/login");
-                    },3000);
-                }
-            }
-        });
 
-    })
-    */
 
     //获得该城市的所有景点
     function JingdianCityAll(city1,currPage) {
@@ -72,7 +49,6 @@
             "dataType": "json",
             "success": function (data) {
                 if(data != null ){
-					alert("长度："+data.list.length)
                     var content = "";
                     for(var i=0;i<data.list.length;i++){
                         content += "<tr><td>"+data.list[i].id+"</td><td><a >"+data.list[i].jingdian+"</a></td><td>"+data.list[i].city1+"</td></tr>"
@@ -107,11 +83,9 @@
 		var jingdian = '[[${jingdian.jingdian}]]'; //景点
 		var id = '[[${jingdian.id}]]';
 		var city1 = '[[${jingdian.city1}]]'
-		alert("function:"+city1)
 
 		JingdianCityAll(city1,1);
 
-		alert("景点："+id)
         var photo3 = '[[${jingdian.photo3}]]';
         var photo6 = '[[${jingdian.photo6}]]';
         var photo9 = '[[${jingdian.photo9}]]';
@@ -165,7 +139,6 @@
                         s = 8;
                     }
                     if(s>4 && i%4==0){
-                        //alert(i)
                         content68 += "</ul>";
                         content68 +="<ul class='thumbnails'>"
                     }
@@ -221,7 +194,6 @@
 		        content122 = "没有该月份的图片"
 			}else{
                 var photos = [];
-                alert("photo12"+photo12)
                 photos = photo12.split(',');
                 var s = photos.length;
                 var s1 = s;

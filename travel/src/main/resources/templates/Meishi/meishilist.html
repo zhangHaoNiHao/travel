@@ -39,71 +39,7 @@
 <!-- END HEAD -->
 <!-- BEGIN BODY -->
 <script>
-    /*
-    $(function () {
-        $.ajax({
-            "url": "/getUsername",
-            "async": false,
-            "type": "get",
-            "dataType": "json",
-            "success": function (data) {
-                if (null != data && "" != data) {
-                    document.getElementById("user").innerHTML = data.username;
-                } else {
-                    layer.alert('请先登录', {
-                        skin: 'layui-layer-molv' //样式类名
-                        , closeBtn: 0
-                    });
-                    setTimeout(function () {
-                        window.location.href = encodeURI("/login");
-                    },3000);
-                }
-            }
-        });
 
-    })
-    */
-
-    /*function MeishiCityAll(city1,currPage) {
-        //根据城市获得该城市所有的景点
-        $.ajax({
-            "url": "/JingdianCityAll",
-            "data":{"city1":city1,"currPage":currPage},
-            "async": false,
-            "type": "get",
-            "dataType": "json",
-            "success": function (data) {
-                if(data != null ){
-                    //var jingdians = data.list;
-					alert("长度："+data.list.length)
-                    var content = "";
-                    for(var i=0;i<data.list.length;i++){
-                        content += "<tr><td>"+data.list[i].id+"</td><td><a href='/getJingdianByid?id="+data.list[i].id+"&currPage=1'>"+data.list[i].jingdian+"</a></td><td>"+data.list[i].city+"</td><td>"+data.list[i].num+"</td></tr>"
-					}
-                    $("#tb").html(content);
-
-                    //寻找第二页的该城市的所有景点
-					count = data.totalCount;
-                    //currPage = data.currPage;
-                    var onPagechange = function(page){
-                        console.log('当前点击页码',page);
-                        //window.location.href = "/JingdianCityAll?currPage="+page+"&city1="+city1;//跳转链接
-                        JingdianCityAll(city1,page);
-                    }
-                    var obj = {
-                        wrapid:'wrap3', //页面显示分页器容器id
-                        total:count,//总条数
-                        pagesize:10,//每页显示10条
-                        currentPage:currPage,//当前页
-                        onPagechange:onPagechange,
-                        btnCount:9 //页数过多时，显示省略号的边界页码按钮数量，可省略，且值是大于5的奇数
-                    }
-                    pagination.init(obj);
-				}
-
-            }
-        })
-    }*/
     //获得所有的美食
     function MeishiAll(city1,currPage) {
         //根据城市获得该城市所有的美食
@@ -115,7 +51,6 @@
             "dataType": "json",
             "success": function (data) {
                 if(data != null ){
-                    alert("MeishiCityAll长度："+data.list.length)
                     var content = "";
                     for(var i=0;i<data.list.length;i++){
                         content += "<tr><td>"+data.list[i].id+"</td><td><a href='/getMeishiByid?id="+data.list[i].id+"&currPage=1'>"+data.list[i].meishi+"</a></td><td>"+data.list[i].city1+"</td><td>"+data.list[i].num+"</td></tr>"
@@ -124,7 +59,6 @@
 
                     //寻找第二页的该城市的所有景点
                     count = data.totalCount;
-                    alert("JingdianCityAll 总数量"+count)
                     var onPagechange = function(page){
                         console.log('当前点击页码',page);
                         MeishiAll(city1,page);
@@ -148,13 +82,11 @@
 		var meishi = '[[${meishi.meishi}]]'; //景点
 		var id = '[[${meishi.id}]]';
 		var city1 = '[[${meishi.city1}]]'
-		alert("function:"+city1)
 		//JingdianCityAll(city1,1);
 
         //找所有的景点
         MeishiAll(city1,1)
 
-		//alert("美食："+id)
 
         var title = meishi+" 图片";
         $("#title1").append(title)
@@ -302,7 +234,7 @@
 					<div class="tabbable tabbable-custom tabbable-full-width">
 						<ul class="nav nav-tabs">
 							<li class="active"><a data-toggle="tab" href="#tab_1_2">美食游记</a></li>
-							<li><a data-toggle="tab" href="#tab_1_4">美食信息</a></li>
+							<!--<li><a data-toggle="tab" href="#tab_1_4">美食信息</a></li>-->
 							<li><a data-toggle="tab" href="#tab_2_5">照片墙</a></li>
 							<li><a data-toggle="tab" href="#tab_1_3">同城美食</a></li>
 

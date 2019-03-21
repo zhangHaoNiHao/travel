@@ -1,12 +1,10 @@
 package com.Dao;
 
-import com.Bean.JingdianBean;
-import com.Bean.JingdianNum;
-import com.Bean.JingdianTravelId;
-import com.Bean.TravelBean1;
+import com.Bean.*;
 import com.utils.JDBCUtil;
 import com.utils.JDBCUtil1;
 import com.utils.RowMap;
+import org.junit.Test;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
@@ -127,6 +125,40 @@ public class JingdianDao {
 		return jingdians;
 	}
 
+	/**
+	 * 查询所有的景点名
+	 */
+	public static List<String> AllJingdianName() throws Exception {
+		String sql = "select jingdian from jingdiannum1";
+		List<String> jingdians = JDBCUtil1.executeQuery(sql, new RowMap<String>() {
+			public String rowMapping(ResultSet rs) throws SQLException {
+				String jingdian = rs.getString("jingdian");
+				return jingdian;
+			}
+		});
+		return jingdians;
+	}
+
+	//修改景点在各个季节的数量
+	public static Boolean updateNumWebMagic(String jingdian,int num,int month,String city1){
+		String sql = "";
+		if(month>=3 && month <=5){
+			sql = "update jingdiannum1 set num3=num3+? where jingdian=? and city1=?";
+		}
+		else if(month>=6 && month<=8){
+			sql = "update jingdiannum1 set num6=num6+? where jingdian=? and city1=?";
+		}else if(month>=9 && month<=11){
+			sql = "update jingdiannum1 set num9=num9+? where jingdian=? and city1=?";
+		}else if(month==12 || month<=2){
+			sql = "update jingdiannum1 set num12=num12+? where jingdian=? and city1=?";
+		}
+		int a = 0;
+		a = JDBCUtil1.executeUpdate(sql,num,jingdian,city1);
+		boolean f = false;
+		if(a>0)
+			f = true;
+		return f;
+	}
 	//修改景点在各个季节的数量
 	public static Boolean updateNum(String jingdian,int num,int month,String city1){
 		String sql = "";
@@ -199,6 +231,7 @@ public class JingdianDao {
 		},jingdian,(currPage-1)*10);
 		return jingdians;
 	}
+
 	/**
 	 * 模糊查询景点的个数
 	 */
@@ -296,10 +329,9 @@ public class JingdianDao {
 		String sql = "select * from jingdiannum1 where jingdian=?";
 		List<JingdianNum> jingdians = JDBCUtil1.executeQuery(sql, new RowMap<JingdianNum>() {
 			public JingdianNum rowMapping(ResultSet rs) throws SQLException {
-				JingdianNum jingdianNum = null;
-				if(rs != null)
-					jingdianNum = new JingdianNum(rs.getInt("id"),jingdian,rs.getString("lng"),rs.getString("lat"),rs.getInt("num"));
-				return jingdianNum;
+				JingdianNum jingdian = new JingdianNum(rs.getInt("id"),rs.getString("jingdian"),rs.getString("city1"),rs.getString("city"),rs.getString("lng"),rs.getString("lat"),rs.getInt("num"),false,rs.getString("photo"),rs.getString("score"));
+				System.out.println("景点："+jingdian +"  分数"+rs.getString("score"));
+				return jingdian;
 			}
 		},jingdian);
 		if(jingdians.size()>0){
@@ -348,32 +380,90 @@ public class JingdianDao {
 		},null);
 		return jingdians;
 	}
+
 	/**
-	 * 根据季节查询前10景点
+	 * 景点频率最多的10个景点
 	 */
-	public List<JingdianNum> SeasonJingdianTop(String month) throws Exception {
+	public static List<JingdianNum> JingdianTop10(int month) throws Exception {
 		String sql = "";
-		if(month.equals("0")){
+		if(month == 0){
 			sql = "select * from jingdiannum1 order by num desc limit 10";
-		}else if(month.equals("1")){ //3-5
+		}else if(month == 1){
 			sql = "select * from jingdiannum1 order by num3 desc limit 10";
-		}else if(month.equals("2")){ //6-8
-			sql = "select * from jingdiannum1 order by num6 desc limit 10";
-		}else if(month.equals("3")){ //9-11
+		}else if(month == 3){ //9-11
 			sql = "select * from jingdiannum1 order by num9 desc limit 10";
-		}else if(month.equals("4")){ //12-2
+		}else if(month == 4){ //12-2
 			sql = "select * from jingdiannum1 order by num12 desc limit 10";
 		}
 		List<JingdianNum> jingdians = JDBCUtil1.executeQuery(sql, new RowMap<JingdianNum>() {
 			public JingdianNum rowMapping(ResultSet rs) throws SQLException {
 				JingdianNum jingdian = null;
 				//jingdian、lng、lat、num、
-				jingdian = new JingdianNum(rs.getInt("id"),rs.getString("jingdian"),rs.getString("city1"),rs.getString("lng"),rs.getString("lat"),rs.getInt("num"),false,rs.getString("photo"));
+				jingdian = new JingdianNum(rs.getInt("id"),rs.getString("jingdian"),rs.getString("city1"),rs.getString("city"),rs.getString("lng"),rs.getString("lat"),rs.getInt("num"),false,rs.getString("photo"),rs.getString("score"));
+				return jingdian;
+			}
+		},null);
+		return jingdians;
+	}
+	/**
+	 * 根据季节查询全国前100景点
+	 */
+	public List<JingdianNum> SeasonJingdianTop(String month) throws Exception {
+		String sql = "";
+		if(month.equals("0")){
+			sql = "select * from jingdiannum1 order by num desc limit 100";
+		}else if(month.equals("1")){ //3-5
+			sql = "select * from jingdiannum1 order by num3 desc limit 100";
+		}else if(month.equals("2")){ //6-8
+			sql = "select * from jingdiannum1 order by num6 desc limit 100";
+		}else if(month.equals("3")){ //9-11
+			sql = "select * from jingdiannum1 order by num9 desc limit 100";
+		}else if(month.equals("4")){ //12-2
+			sql = "select * from jingdiannum1 order by num12 desc limit 100";
+		}
+		List<JingdianNum> jingdians = JDBCUtil1.executeQuery(sql, new RowMap<JingdianNum>() {
+			public JingdianNum rowMapping(ResultSet rs) throws SQLException {
+				JingdianNum jingdian = null;
+				//jingdian、lng、lat、num、
+				jingdian = new JingdianNum(rs.getInt("id"),rs.getString("jingdian"),rs.getString("city1"),rs.getString("city"),rs.getString("lng"),rs.getString("lat"),rs.getInt("num"),false,rs.getString("photo"),rs.getString("score"));
 				return jingdian;
 			}
 		},null);
 		return jingdians;
 
+	}
+
+	/**
+	 * 根据季节查询城市前10景点
+	 */
+	public List<JingdianNum> SeasonCityJingdianTop1(String city1,String month) throws Exception {
+		System.out.println("城市："+city1);
+		String sql = "";
+		if(month.equals("0")){
+			sql = "select * from jingdiannum1 where city1=? order by num desc limit 5";
+		}else if(month.equals("1")){ //3-5
+			sql = "select * from jingdiannum1 where city1=? order by num3 desc limit 5";
+		}else if(month.equals("2")){ //6-8
+			sql = "select * from jingdiannum1 where city1=? order by num6 desc limit 5";
+		}else if(month.equals("3")){ //9-11
+			sql = "select * from jingdiannum1 where city1=? order by num9 desc limit 5";
+		}else if(month.equals("4")){ //12-2
+			sql = "select * from jingdiannum1 where city1=? order by num12 desc limit 5";
+		}
+		List<JingdianNum> jingdians = JDBCUtil1.executeQuery(sql, new RowMap<JingdianNum>() {
+			public JingdianNum rowMapping(ResultSet rs) throws SQLException {
+				JingdianNum jingdian = null;
+				jingdian = new JingdianNum(rs.getInt("id"),rs.getString("jingdian"),rs.getString("city1"),rs.getString("city"),rs.getString("lng"),rs.getString("lat"),rs.getInt("num"),false,rs.getString("photo"),rs.getString("score"));
+				return jingdian;
+			}
+		},city1);
+		return jingdians;
+
+	}
+	@Test
+	public void test(){
+		String str = "ddddd\nddd";
+		System.out.println(str);
 	}
 
 	/**
@@ -389,7 +479,7 @@ public class JingdianDao {
 				jingdian = new JingdianNum(rs.getInt("id"),rs.getString("jingdian"),rs.getString("city1"),rs.getString("lng"),rs.getString("lat"),
 						rs.getInt("num"),false,rs.getString("photo"),rs.getString("photo3"),rs.getString("photo6"),rs.getString("photo9"),
 						rs.getString("photo12"));
-				System.out.println(rs.getString("photo"));
+				//System.out.println(rs.getString("photo")+);
 				return jingdian;
 			}
 		},id);
@@ -422,7 +512,37 @@ public class JingdianDao {
 				return travelId;
 			}
 		},city1,jingdina);
-		return travelIds.get(0);
+		if(travelIds.size() > 0)
+			return travelIds.get(0);
+		else
+			return null;
 	}
+
+	/**
+	 * 根据城市和景点，查询该景点对应的游记id
+	 */
+	public static boolean UpdatetravelId(JingdianTravelId travelId) throws Exception {
+		String sql = "update jingdiantravelid set travelids=? where id=?";
+		int a = 0;
+		a = JDBCUtil1.executeUpdate(sql,travelId.getTravelids(),travelId.getId());
+		if(a>0)
+			return true;
+		else
+			return false;
+	}
+
+	/**
+	 * 根据城市和景点修改景点分数
+	 */
+	public static boolean UpdateJingdianScore(JingdianContentBean jingdian){
+		String sql = "update jingdiannum1 set score=? where jingdian=? and city1=?";
+		int a = 0;
+		a = JDBCUtil1.executeUpdate(sql,jingdian.getScore(),jingdian.getJingdian(),jingdian.getCity1());
+		if(a>0)
+			return true;
+		else
+			return false;
+	}
+
 
 }

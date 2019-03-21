@@ -36,129 +36,7 @@
 <!-- END HEAD -->
 <!-- BEGIN BODY -->
 <script>
-    /*
-    $(function () {
-        $.ajax({
-            "url": "/getUsername",
-            "async": false,
-            "type": "get",
-            "dataType": "json",
-            "success": function (data) {
-                if (null != data && "" != data) {
-                    document.getElementById("user").innerHTML = data.username;
-                } else {
-                    layer.alert('请先登录', {
-                        skin: 'layui-layer-molv' //样式类名
-                        , closeBtn: 0
-                    });
-                    setTimeout(function () {
-                        window.location.href = encodeURI("/login");
-                    },3000);
-                }
-            }
-        });
 
-    })
-    */
-    /*$(function () {
-		//获取对象，将图片追加到元素中
-		var jingdian = '[[${jingdian.jingdian}]]'; //景点
-		alert("景点："+jingdian)
-		var photo11 = '[[${jingdian.photo}]]';
-        var photo3 = '[[${jingdian.photo3}]]';
-        var photo6 = '[[${jingdian.photo6}]]';
-        var photo9 = '[[${jingdian.photo9}]]';
-        var photo12 = '[[${jingdian.photo12}]]';
-		alert("图片链接："+photo11);
-        var content = "";
-		if(photo11 != null){
-		    var photos = [];
-		    photos = photo11.split(',');
-		    var s = photos.length;alert("长度："+s)
-		    content +="<ul class='thumbnails'>";
-			alert(photos[1])
-		    for(var i=0;i<s;i++){
-				if(s>4 && i%4==0){
-				    alert(i)
-				    content += "</ul>";
-				    content +="<ul class='thumbnails'>"
-				}
-				content += "<li class='span3'><a class='fancybox-button' data-rel='fancybox-button' title='390 x 220 - keenthemes.com' href='media/image/image1.jpg'>"+
-                    "<img src='"+photos[i]+"' alt=''><span><em>"+jingdian+"</em></span></a></li>";
-			}
-			content += "</ul>";
-		}
-		if(photo3 != null){
-            var photos = [];
-            photos = photo3.split(',');
-            var s = photos.length;
-            alert("长度："+s)
-            content +="<ul class='thumbnails'>";
-            alert(photos[1])
-            for(var i=0;i<s;i++){
-                if(s>4 && i%4==0){
-                    alert(i)
-                    content += "</ul>";
-                    content +="<ul class='thumbnails'>"
-                }
-                content += "<li class='span3'><a class='fancybox-button' data-rel='fancybox-button' title='390 x 220 - keenthemes.com' href='media/image/image1.jpg'>"+
-                    "<img src='"+photos[i]+"' alt=''><span><em>"+jingdian+"</em></span></a></li>";
-            }
-            content += "</ul>";
-		}
-		if(photo6 != null){
-            var photos = [];
-            photos = photo6.split(',');
-            var s = photos.length;alert("长度："+s)
-            content +="<ul class='thumbnails'>";
-            alert(photos[1])
-            for(var i=0;i<s;i++){
-                if(s>4 && i%4==0){
-                    alert(i)
-                    content += "</ul>";
-                    content +="<ul class='thumbnails'>"
-                }
-                content += "<li class='span3'><a class='fancybox-button' data-rel='fancybox-button' title='390 x 220 - keenthemes.com' href='media/image/image1.jpg'>"+
-                    "<img src='"+photos[i]+"' alt=''><span><em>"+jingdian+"</em></span></a></li>";
-            }
-            content += "</ul>";
-		}
-		if(photo9 != null){
-            var photos = [];
-            photos = photo9.split(',');
-            var s = photos.length;alert("长度："+s)
-            content +="<ul class='thumbnails'>";
-            alert(photos[1])
-            for(var i=0;i<s;i++){
-                if(s>4 && i%4==0){
-                    alert(i)
-                    content += "</ul>";
-                    content +="<ul class='thumbnails'>"
-                }
-                content += "<li class='span3'><a class='fancybox-button' data-rel='fancybox-button' title='390 x 220 - keenthemes.com' href='media/image/image1.jpg'>"+
-                    "<img src='"+photos[i]+"' alt=''><span><em>"+jingdian+"</em></span></a></li>";
-            }
-            content += "</ul>";
-		}
-		if(photo12 != null){
-            var photos = [];
-            photos = photo12.split(',');
-            var s = photos.length;alert("长度："+s)
-            content +="<ul class='thumbnails'>";
-            alert(photos[1])
-            for(var i=0;i<s;i++){
-                if(s>4 && i%4==0){
-                    alert(i)
-                    content += "</ul>";
-                    content +="<ul class='thumbnails'>"
-                }
-                content += "<li class='span3'><a class='fancybox-button' data-rel='fancybox-button' title='390 x 220 - keenthemes.com' href='media/image/image1.jpg'>"+
-                    "<img src='"+photos[i]+"' alt=''><span><em>"+jingdian+"</em></span></a></li>";
-            }
-            content += "</ul>";
-		}
-        $("#content11").html(content);
-    })*/
 </script>
 
 <body class="page-header-fixed">
@@ -169,103 +47,7 @@
 	<!-- BEGIN CONTAINER -->
 	<div class="page-container row-fluid">
 		<!-- BEGIN SIDEBAR -->
-		<div class="page-sidebar nav-collapse collapse">
-			<!--左侧栏-->
-			<ul class="page-sidebar-menu">
-				<li>
-					<div class="sidebar-toggler hidden-phone"></div>
-				</li>
-				<li>
-				</li>
-				<!--<li class="start active ">-->
-				<li class="start ">
-					<a href="/index">
-						<i class="icon-home"></i>
-						<span class="title">首页</span>
-						<span class="selected"></span>
-					</a>
-				</li>
-				<li class=" ">
-					<a href="javascript:;">
-						<i class="icon-cogs"></i>
-						<span class="title">手册</span>
-						<span class="arrow "></span>
-					</a>
-					<ul class="sub-menu">
-						<li>
-							<a href="/list">收藏手册</a>
-						</li>
-						<li >
-							<a href="/search">购物手册</a>
-						</li>
-						<li >
-							<a href="/youjilist">美食手册</a>
-						</li>
-					</ul>
-				</li>
-				<li class="">
-					<a href="javascript:;">
-						<i class="icon-bookmark-empty"></i>
-						<span class="title">游记</span>
-						<!--<span class="selected"></span>-->
-						<span class="arrow "></span>
-					</a>
-					<ul class="sub-menu">
-						<!--<li class="active">-->
-						<li >
-							<a href="/list">所有游记</a>
-						</li>
-						<li >
-							<a href="/list">已发表游记</a>
-						</li>
-						<li >
-							<a href="/list">草稿箱</a>
-						</li>
-					</ul>
-				</li>
-				<li class="">
-					<a href="javascript:;">
-						<i class="icon-table"></i>
-						<span class="title">评论</span>
-						<span class="arrow "></span>
-					</a>
-					<ul class="sub-menu">
-						<li >
-							<a href="/list">我的评论</a>
-						</li>
-						<li >
-							<a href="/list">关于我的评论</a>
-						</li>
-					</ul>
-				</li>
-				<li class="active">
-					<a href="javascript:;">
-						<i class="icon-briefcase"></i>
-						<span class="title">用户管理</span>
-						<span class="arrow "></span>
-					</a>
-					<ul class="sub-menu">
-						<li >
-							<a href="/list">
-								<i class="icon-time"></i>
-								用户信息</a>
-						</li>
-						<li class="active">
-							<a href="/list">
-								<i class="icon-cogs"></i>
-								用户列表</a>
-						</li>
-						<li >
-							<a href="/list">
-								<i class="icon-cogs"></i>
-								权限管理</a>
-						</li>
-					</ul>
-				</li>
-
-			</ul>
-			<!-- END SIDEBAR MENU -->
-		</div>
+		<div class="page-sidebar nav-collapse collapse" th:include="left.html"></div>
 		<!-- END 左侧栏 -->
 		<!-- 页面 -->
 		<div class="page-content">
@@ -331,7 +113,7 @@
 						<!-- 自定义窗口 -->
 						<!-- BEGIN PAGE TITLE & BREADCRUMB-->
 						<h3 class="page-title">
-							游记推荐 <small>search results</small>
+							用户管理 <small>search results</small>
 						</h3>
 						<ul class="breadcrumb">
 							<li>
@@ -355,9 +137,6 @@
 
 					<div class="tabbable tabbable-custom tabbable-full-width">
 						<ul class="nav nav-tabs">
-							<!--<li class="active"><a data-toggle="tab" href="#tab_1_2">游记</a></li>
-							<li><a data-toggle="tab" href="#tab_2_5">景点</a></li>
-							<li><a data-toggle="tab" href="#tab_1_4">照片墙</a></li>-->
 							<li><a data-toggle="tab" href="#tab_1_5">User Search </a></li>
 						</ul>
 
@@ -380,7 +159,7 @@
 												<th>ID</th>
 												<th>Username</th>
 												<th class="hidden-phone">Email</th>
-												<th class="hidden-phone">Number</th>
+												<th class="hidden-phone">Role</th>
 												<th class="hidden-phone">Update</th>
 												<th class="hidden-phone">Delete</th>
 												<th></th>
@@ -390,50 +169,26 @@
 
 										<forEach th:each="item:${userBeans }" varStatus="status">
 											<tr>
-												<td th:text="${item.id }"></td>
+												<td th:text="${item.id }" id="userid"></td>
 												<!--th:href="@{'/userInfo?id='+${item.id }+'&city='+${item.city }}"-->
 												<td><a href="#" th:text="${item.username }"></a></td>
 												<td th:text="${item.email }"></td>
-												<td th:text="${item.email }">
-													<button class="btn purple">Update
-														<i class="m-icon-swapright m-icon-white"></i>
-													</button>
+												<td th:text="${item.juese }"></td>
+												<td>
+													<a th:href="@{'/updateRight?id='+${item.id }}"  class="btn purple">Update<i class="m-icon-swapright m-icon-white"></i></a>
 												</td>
-												<td th:text="${item.email }">
-													<button class="btn purple">Delete
-														<i class="m-icon-swapright m-icon-white"></i>
-													</button>
+												<td >
+													<a  onclick="deleteuser()" class="btn purple">Delete<i class="m-icon-swapright m-icon-white"></i></a>
 												</td>
 												<td ></td>
-
 												<!--<td th:text="${item.score }"></td>-->
 											</tr>
 										</forEach>
-											<!--<tr>
-												<td><img src="../media/image/avatar1.jpg" alt="" /></td>
-												<td class="hidden-phone">Mark Nilson</td>
-												<td>makr124</td>
-												<td class="hidden-phone">19 Jan 2012</td>
-												<td class="hidden-phone">1245</td>
-												<td><span class="label label-success">Approved</span></td>
-												<td><a class="btn mini red-stripe" href="#">View</a></td>
-											</tr>-->
-
 										</tbody>
 									</table>
 								</div>
 								<div class="space5"></div>
-								<div class="pagination pagination-right">
-									<ul>
-										<li><a href="#">Prev</a></li>
-										<li><a href="#">1</a></li>
-										<li><a href="#">2</a></li>
-										<li class="active"><a href="#">3</a></li>
-										<li><a href="#">4</a></li>
-										<li><a href="#">5</a></li>
-										<li><a href="#">Next</a></li>
-									</ul>
-								</div>
+
 							</div>
 							<!--end tab-pane-->
 						</div>
@@ -446,19 +201,13 @@
 		</div>
 		<!-- END PAGE -->
 	</div>
-	<!-- END CONTAINER -->
-	<!-- BEGIN FOOTER -->
 	<div class="footer">
-		<div class="footer-inner">
-			2013 &copy; Metronic by keenthemes.Collect from <a href="http://www.cssmoban.com/" title="网站模板" target="_blank">网站模板</a> - More Templates <a href="http://www.cssmoban.com/" target="_blank" title="模板之家">模板之家</a>
-		</div>
 		<div class="footer-tools">
 			<span class="go-top">
 			<i class="icon-angle-up"></i>
 			</span>
 		</div>
 	</div>
-	<!-- END FOOTER -->
 	<!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
 	<!-- BEGIN CORE PLUGINS -->
 	<script src="../media/js/jquery-1.10.1.min.js" type="text/javascript"></script>
@@ -484,8 +233,42 @@
 		   App.init();
 		   Search.init();
 		});
+
+		function updateuser1() {
+            var userid = $("#userid").val();
+        }
+
+        function deleteuser(){
+            var userid = $("#userid").val();
+            layer.alert('确认删除?', {
+                skin: 'layui-layer-molv' //样式类名
+                , closeBtn: 0
+            });
+            $.ajax({
+                "url": "/deleteuser",
+                "data": {
+                    "id": userid
+                },
+                "async": false,
+                "type": "get",
+                "dataType": "json",
+                "success": function (data) {
+                    if (data == 0) {
+                        layer.alert('删除失败', {
+                            skin: 'layui-layer-molv' //样式类名
+                            , closeBtn: 0
+                        });
+                    }else{
+                        layer.alert('删除成功', {
+                            skin: 'layui-layer-molv' //样式类名
+                            , closeBtn: 0
+                        });
+					}
+                    window.location.href = "/Userlist";
+                }
+            })
+
+		}
 	</script>
-	<!-- END JAVASCRIPTS -->
 </body>
-<!-- END BODY -->
 </html>

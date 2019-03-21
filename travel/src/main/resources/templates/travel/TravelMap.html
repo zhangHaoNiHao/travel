@@ -54,7 +54,6 @@
                     content += "<div class='scroller' data-height='290px' data-always-visible='1' data-rail-visible='0'>" +
                         "<ul class='feeds'>"
                     for(var i=0;i<rs.length;i++){
-                        //alert(rs[i].city1)
                         content += "<li><a href='/TravelList?city1="+rs[i].city1+"&currPage=1'><div class='col1'><div class='cont'><div class='cont-col1'><div class='label label-success'><i class='icon-bell'></i>"+
                             "</div></div><div class='cont-col2'><div class='desc'>"+rs[i].city+"</div></div></div></div><div class='col2'><div class='date'>"+rs[i].num+"</div></div></a></li>";
                     }
@@ -324,7 +323,6 @@
 
     function ChangeMonth(){
         var month = document.getElementById("month").value;
-        alert(month)
         mapLoad(month)
         CityTravelTop(month);
         JingdianTop(month);
@@ -467,12 +465,10 @@
                         "type": "get",
                         "dataType": "json",
                         "success": function (rs) {
-                            // alert("长度："+rs.length)
                             if (null != rs && "" != rs) {
                                 for(var i=0;i<rs.length;i++){
                                     provincename = rs[i].province;
                                     if(kind == 0){
-                                        //alert("kind:"+kind)
                                         haonum = rs[i].haonum; //省总的好游记数
                                         normalnum = rs[i].normalnum; //省总的一般游记数
                                         badnum = rs[i].badnum; //省总的差游记数
@@ -658,12 +654,10 @@
                         "type": "get",
                         "dataType": "json",
                         "success": function (rs) {
-                            // alert("长度："+rs.length)
                             if (null != rs && "" != rs) {
                                 for(var i=0;i<rs.length;i++){
                                     //该省的所有城市
                                     cityname = rs[i].city;
-                                    alert("省下边的城市："+cityname);
                                     if(kind == 0){
                                         //alert("kind:"+kind)
                                         haonum = rs[i].haonum; //省总的好游记数
@@ -895,7 +889,6 @@
                 //百度地图
                 var map = new BMap.Map("allmap");    // 创建Map实例
                 var point11 = new BMap.Point(arr[0].lng,arr[0].lat);
-                alert("中心点"+arr[0].lng+"..."+arr[0].lat)
 
                 map.centerAndZoom(point11,5); // 初始化地图,设置中心点坐标和地图级别
                 map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放

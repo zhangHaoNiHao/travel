@@ -22,17 +22,22 @@ public class UserDaoImp implements UserDao{
 	 * @param username
 	 * @return
 	 */
-
 	public Boolean delete(String username) throws Exception {
 		Boolean f = false;
 		int a = 0;
 		String sql = "delete * from user where username=?";
 		
-		a = jdbcUtils.executeUpdate(sql, username);
+		a = JDBCUtil1.executeUpdate(sql, username);
 		if(a > 0){
 			f = true;
 		}
 		return f; 
+	}
+	public int deleteuser(int id) throws Exception {
+		int a = 0;
+		String sql = "delete * from user where id=?";
+		a = JDBCUtil1.executeUpdate(sql, id);
+		return a;
 	}
 
     /**
@@ -78,35 +83,28 @@ public class UserDaoImp implements UserDao{
 		return null;
 	}
 
+	/**
+	 * 查找用户
+	 */
 	public List<UserBean> search(String username) throws Exception{
-		
-		List<UserBean> list = jdbcUtils.executeQuery("select * from user where username=?", new RowMap<UserBean>(){
-			public UserBean rowMapping(ResultSet rs) {
-				UserBean u = null;
-				try {
-					u = new UserBean(rs.getString("username"),rs.getString("password"));
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
+		String sql ="select * from user where username=?";
+		List<UserBean> list = JDBCUtil1.executeQuery(sql, new RowMap<UserBean>(){
+			public UserBean rowMapping(ResultSet rs) throws SQLException {
+				UserBean u = new UserBean(rs.getInt("id"),rs.getString("username"),rs.getString("password"),rs.getString("email"),rs.getString("juese"));
 				return u;
 			}
 		}, username);
-		
-		return list;	
+		return list;
 	}
 
 	/***
 	 * 查询所有用户
 	 */
 	public List<UserBean> Userlist() throws Exception{
-		List<UserBean> list = JDBCUtil1.executeQuery("select * from user", new RowMap<UserBean>(){
-			public UserBean rowMapping(ResultSet rs) {
-				UserBean u = null;
-				try {
-					u = new UserBean(rs.getString("username"),rs.getString("password"));
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
+		String sql = "select * from user";
+		List<UserBean> list = JDBCUtil1.executeQuery(sql, new RowMap<UserBean>(){
+			public UserBean rowMapping(ResultSet rs) throws SQLException {
+				UserBean u = new UserBean(rs.getInt("id"),rs.getString("username"),rs.getString("password"),rs.getString("email"),rs.getString("juese"));
 				return u;
 			}
 		}, null);
@@ -120,7 +118,7 @@ public class UserDaoImp implements UserDao{
 		String sql = "select * from user where id=?";
 		List<UserBean> users = JDBCUtil1.executeQuery(sql, new RowMap<UserBean>() {
 			public UserBean rowMapping(ResultSet rs) throws SQLException {
-				UserBean bean = new UserBean(id,rs.getString("username"),rs.getString("password"),rs.getString("email"));
+				UserBean bean = new UserBean(id,rs.getString("username"),rs.getString("password"),rs.getString("email"),rs.getString("juese"));
 				return bean;
 
 			}
@@ -161,4 +159,25 @@ public class UserDaoImp implements UserDao{
 		return list;
 	}
 
+	public static int Updateuser(String username,String email,int id){
+		String sql = "update user set username=?,email=? where id=?";
+		int a = 0;
+		a = JDBCUtil1.executeUpdate(sql,username,email,id);
+		return a;
+	}
+
+	public int Updateuser1(String username, String email, int id, String role) {
+		String sql = "update user set username=?,email=?,juese=? where id=?";
+		int a = 0;
+		a = JDBCUtil1.executeUpdate(sql,username,email,role,id);
+		return a;
+	}
+	//修改密码
+	public int UpdatePassword(Integer id, String password) {
+		System.out.println("id  dao"+id);
+		String sql = "update user set password=? where id=?";
+		int a = 0;
+		a = JDBCUtil1.executeUpdate(sql,password,id);
+		return a;
+	}
 }

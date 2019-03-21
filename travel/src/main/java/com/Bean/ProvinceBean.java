@@ -29,6 +29,15 @@ public class ProvinceBean {
     private String lng;
     private String lat;
 
+
+    public ProvinceBean(int id, String city, String city1, String lng, String lat) {
+        this.id = id;
+        this.city = city;
+        this.city1 = city1;
+        this.lng = lng;
+        this.lat = lat;
+    }
+
     public String getLng() {
         return lng;
     }

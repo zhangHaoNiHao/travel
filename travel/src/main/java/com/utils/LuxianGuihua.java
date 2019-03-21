@@ -1,6 +1,7 @@
 package com.utils;
 
 import com.Bean.JingdianNum;
+import com.Bean.MeishiBean;
 import com.Dao.TravelDao;
 import com.JingdianUtil.JingdianTest;
 import org.junit.Test;
@@ -64,6 +65,27 @@ public class LuxianGuihua {
         jingdians.get(x).setVisit(true);//将找到的点设为已访问
         list.add(jingdians.get(x));
         ShortPoint(jingdians.get(x),jingdians,list);
+    }
+    //美食最短路径
+    public void ShortPointMeishi(MeishiBean qidian, List<MeishiBean> meishis, List<MeishiBean> list){
+        double min = 10000000;
+        int x = 0;
+        int a = 0;
+        for(int i=0;i<meishis.size();i++){
+            if(!meishis.get(i).isVisit()){//该景点没被访问
+                double discount = discount(qidian.getLng(), qidian.getLat(), meishis.get(i).getLng(), meishis.get(i).getLat());
+                if(discount < min){
+                    min = discount;
+                    x = i;
+                }
+                a++;
+            }
+        }
+        if(a == 0)
+            return;
+        meishis.get(x).setVisit(true);//将找到的点设为已访问
+        list.add(meishis.get(x));
+        ShortPointMeishi(meishis.get(x),meishis,list);
     }
     @Test
     public void test() throws Exception {
